@@ -551,7 +551,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 }
                 break;
 
-            case R.id.adminUserHomeActivityPayButtonId:
+            case R.id.adminUserHomeActivityWithdrawButtonId:
                 showPaymentAlertDialog();
                 break;
 
@@ -561,6 +561,9 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
             case R.id.paymentAlertDialogConfirmButtonId:
                 startPaymentRequest();
+                break;
+
+            case R.id.adminUserHomeActivityPayButtonId:
                 break;
         }
     }
