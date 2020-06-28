@@ -20,7 +20,13 @@ import com.google.api.services.drive.model.FileList;
 import com.uttam.callrecord.backuppro.drive.DriveServiceHelper;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 
 public class Utils {
 
@@ -174,6 +180,42 @@ public class Utils {
             }
         }
         return databasePath;
+    }
+
+    public static synchronized String increaseTimeUsingValues(int increasingDays) {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + increasingDays);
+        return sdf.format(calendar.getTime());
+    }
+
+    public static String getCurrentTime() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        return sdf.format(calendar.getTime());
+    }
+
+    public static String getTimeDifBetweenToTime(String startTime, String endTime) {
+        try {
+
+            Date date1;
+            Date date2;
+
+            SimpleDateFormat dates = new SimpleDateFormat("dd-MM-yyyy");
+
+            //Setting dates
+            date1 = dates.parse(startTime);
+            date2 = dates.parse(endTime);
+
+            //Comparing dates
+            long difference = Math.abs(date1.getTime() - date2.getTime());
+            long differenceDates = difference / (24 * 60 * 60 * 1000);
+
+            return Long.toString(differenceDates);
+
+        } catch (Exception exception) {
+            return null;
+        }
     }
 
 
