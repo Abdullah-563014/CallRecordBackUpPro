@@ -5,15 +5,17 @@ public class WithdrawRequestModelClass {
     private String email;
     private String name;
     private String withdrawRequestAmount;
+    private String paymentMethod;
     private String paymentMethodInfo;
 
     public WithdrawRequestModelClass() {
     }
 
-    public WithdrawRequestModelClass(String email, String name, String withdrawRequestAmount, String paymentMethodInfo) {
+    public WithdrawRequestModelClass(String email, String name, String withdrawRequestAmount, String paymentMethod, String paymentMethodInfo) {
         this.email = email;
         this.name = name;
         this.withdrawRequestAmount = withdrawRequestAmount;
+        this.paymentMethod = paymentMethod;
         this.paymentMethodInfo = paymentMethodInfo;
     }
 
@@ -39,6 +41,14 @@ public class WithdrawRequestModelClass {
 
     public void setWithdrawRequestAmount(String withdrawRequestAmount) {
         this.withdrawRequestAmount = withdrawRequestAmount;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public String getPaymentMethodInfo() {

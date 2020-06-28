@@ -9,12 +9,12 @@ public class UserInfoModelClass {
     private String payTime;
     private String expireTime;
     private String myBalance;
-    private String myReferCount;
+    private String myPaidReferCount;
 
     public UserInfoModelClass() {
     }
 
-    public UserInfoModelClass(String email, String topics, String parentReferCode, String myReferCode, String paidStatus, String payTime, String expireTime, String myBalance, String myReferCount) {
+    public UserInfoModelClass(String email, String topics, String parentReferCode, String myReferCode, String paidStatus, String payTime, String expireTime, String myBalance, String myPaidReferCount) {
         this.email = email;
         this.topics = topics;
         this.parentReferCode = parentReferCode;
@@ -23,7 +23,7 @@ public class UserInfoModelClass {
         this.payTime = payTime;
         this.expireTime = expireTime;
         this.myBalance = myBalance;
-        this.myReferCount = myReferCount;
+        this.myPaidReferCount = myPaidReferCount;
     }
 
     public String getEmail() {
@@ -90,11 +90,11 @@ public class UserInfoModelClass {
         this.myBalance = myBalance;
     }
 
-    public String getMyReferCount() {
-        return myReferCount;
+    public String getMyPaidReferCount() {
+        return myPaidReferCount;
     }
 
-    public void setMyReferCount(String myReferCount) {
-        this.myReferCount = myReferCount;
+    public void setMyPaidReferCount(String myPaidReferCount) {
+        this.myPaidReferCount = myPaidReferCount;
     }
 }

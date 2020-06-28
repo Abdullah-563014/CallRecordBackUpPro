@@ -62,7 +62,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private TextView paidStatusTextView, referCodeTextView,myBalanceTextView;
     private RadioGroup paymentRadioGroup;
     private AlertDialog parentReferCodeAlertDialog,paymentAlertDialog;
-    private String databasePath, userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance,myReferCount,paymentMethod,paymentMethodInfo,paymentAmount,userName;
+    private String databasePath, userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance,myPaidReferCount,paymentMethod,paymentMethodInfo,paymentAmount,userName;
     private DatabaseReference databaseReference;
     private ProgressBar progressBar;
     private AdminNoticeModelClass adminNoticeModelClass;
@@ -312,9 +312,9 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     }
 
     private void saveAdminInfoToServer() {
-        if (userEmail != null && !TextUtils.isEmpty(userEmail) && topics != null && !TextUtils.isEmpty(topics) && parentReferCode != null && !TextUtils.isEmpty(parentReferCode) && myReferCode != null && !TextUtils.isEmpty(myReferCode) && userPaidStatus != null && !TextUtils.isEmpty(userPaidStatus) && payTime != null && !TextUtils.isEmpty(payTime) && expireTime != null && !TextUtils.isEmpty(expireTime) && myBalance != null && !TextUtils.isEmpty(myBalance) && myReferCount != null && !TextUtils.isEmpty(myReferCount)) {
+        if (userEmail != null && !TextUtils.isEmpty(userEmail) && topics != null && !TextUtils.isEmpty(topics) && parentReferCode != null && !TextUtils.isEmpty(parentReferCode) && myReferCode != null && !TextUtils.isEmpty(myReferCode) && userPaidStatus != null && !TextUtils.isEmpty(userPaidStatus) && payTime != null && !TextUtils.isEmpty(payTime) && expireTime != null && !TextUtils.isEmpty(expireTime) && myBalance != null && !TextUtils.isEmpty(myBalance) && myPaidReferCount != null && !TextUtils.isEmpty(myPaidReferCount)) {
             progressBar.setVisibility(View.VISIBLE);
-            UserInfoModelClass userInfoModelClass = new UserInfoModelClass(userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance,myReferCount);
+            UserInfoModelClass userInfoModelClass = new UserInfoModelClass(userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance,myPaidReferCount);
             databaseReference.child("Users").child(databasePath).setValue(userInfoModelClass)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -357,7 +357,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                         payTime = modelClass.getPayTime();
                         expireTime = modelClass.getExpireTime();
                         myBalance = modelClass.getMyBalance();
-                        myReferCount = modelClass.getMyReferCount();
+                        myPaidReferCount = modelClass.getMyPaidReferCount();
                     }
                     updateUserInfoToTextView();
                 } else {
@@ -402,7 +402,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
             if (withdrawRupee<=Integer.parseInt(myBalance)){
                 if (withdrawRupee>=100){
                     progressBar.setVisibility(View.VISIBLE);
-                    WithdrawRequestModelClass requestModelClass=new WithdrawRequestModelClass(userEmail,userName,paymentAmount,paymentMethodInfo);
+                    WithdrawRequestModelClass requestModelClass=new WithdrawRequestModelClass(userEmail,userName,paymentAmount,paymentMethod,paymentMethodInfo);
                     databaseReference.child("WithdrawRequest").child(databasePath).setValue(requestModelClass)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -517,7 +517,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 payTime = "0";
                 expireTime = "0";
                 myBalance = "0";
-                myReferCount = "0";
+                myPaidReferCount = "0";
                 saveAdminInfoToServer();
                 parentReferCodeAlertDialog.dismiss();
                 break;
@@ -528,7 +528,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 payTime = "0";
                 expireTime = "0";
                 myBalance = "0";
-                myReferCount = "0";
+                myPaidReferCount = "0";
                 saveAdminInfoToServer();
                 parentReferCodeAlertDialog.dismiss();
                 break;
