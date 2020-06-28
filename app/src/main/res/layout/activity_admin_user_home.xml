@@ -45,9 +45,20 @@
             android:textColor="@color/colorBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/adminUserHomeActivityPremiumReferCountTextViewId"
+            android:text="Premium Refer Count:- "
+            android:layout_below="@+id/adminUserHomeActivityReferCodeTextViewId"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/colorBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <LinearLayout
             android:id="@+id/adminUserHomeActivityShareButtonsRootLayoutId"
-            android:layout_below="@+id/adminUserHomeActivityReferCodeTextViewId"
+            android:layout_below="@+id/adminUserHomeActivityPremiumReferCountTextViewId"
             android:weightSum="2"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"

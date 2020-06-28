@@ -59,7 +59,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private Button showAllCallRecordButton,shareAppButton,shareReferCodeButton,withdrawButton,getPaidVersionButton;
     private ImageView whatsAppImageView, adminNoticeImageView;
     private EditText parentReferCodeAlertDialogEditText,paymentAlertDialogPaymentMethodInfoEditText,paymentAlertDialogPaymentAmountEditText;
-    private TextView paidStatusTextView, referCodeTextView,myBalanceTextView;
+    private TextView paidStatusTextView, referCodeTextView,myBalanceTextView,premiumReferCountTextView;
     private RadioGroup paymentRadioGroup;
     private AlertDialog parentReferCodeAlertDialog,withdrawAlertDialog;
     private String databasePath, userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance,myPaidReferCount,paymentMethod,paymentMethodInfo,paymentAmount,userName;
@@ -123,6 +123,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         shareReferCodeButton=findViewById(R.id.adminUserHomeActivityShareReferCodeButtonId);
         withdrawButton=findViewById(R.id.adminUserHomeActivityWithdrawButtonId);
         getPaidVersionButton=findViewById(R.id.adminUserHomeActivityPayButtonId);
+        premiumReferCountTextView=findViewById(R.id.adminUserHomeActivityPremiumReferCountTextViewId);
         progressBar = findViewById(R.id.adminUserHomeActivitySpinKitId);
         progressBar.setVisibility(View.GONE);
 
@@ -292,6 +293,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         }
         myBalanceTextView.setText("Your Balance Is:- "+myBalance);
         referCodeTextView.setText("Your Refer Code:- " + myReferCode);
+        premiumReferCountTextView.setText("Premium Refer Count:- " + myPaidReferCount);
     }
 
     private void showParentReferCodeAlertDialog() {
