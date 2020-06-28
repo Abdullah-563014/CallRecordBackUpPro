@@ -399,7 +399,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         paymentAmount=paymentAlertDialogPaymentAmountEditText.getText().toString();
         if (!TextUtils.isEmpty(paymentAmount) && !TextUtils.isEmpty(paymentMethodInfo) && paymentMethod!=null && !TextUtils.isEmpty(paymentMethod)){
             int withdrawRupee=Integer.parseInt(paymentAmount);
-            if (withdrawRupee>=Integer.parseInt(myBalance)){
+            if (withdrawRupee<=Integer.parseInt(myBalance)){
                 if (withdrawRupee>=100){
                     progressBar.setVisibility(View.VISIBLE);
                     WithdrawRequestModelClass requestModelClass=new WithdrawRequestModelClass(userEmail,userName,paymentAmount,paymentMethodInfo);
@@ -582,4 +582,6 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         }
         Log.d(Constants.TAG,"payment method is "+paymentMethod);
     }
+
+
 }
