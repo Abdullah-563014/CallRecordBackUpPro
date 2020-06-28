@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RelativeLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:elevation="0dp"
+    android:background="#ffffff"
+    android:layout_marginBottom="2dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginLeft="5dp"
+    android:layout_height="60dp"
+    android:layout_width="match_parent"
+    tools:ignore="UnusedAttribute">
+
+
+    <RelativeLayout
+        android:background="@drawable/home_activity_record_list_incoming_call_background"
+        android:layout_height="80dp"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/homeActivityModelViewRelativeLayoutId">
+
+        <ImageView
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:id="@+id/homeActivityRecordListAccountCircleImageViewId"
+            android:src="@drawable/ic_account_circle"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <ImageView
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:id="@+id/homeActivityRecordListModelCallIndicatorImageViewId"
+            android:src="@drawable/ic_call_outgoing"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/homeActivityRecordListAccountCircleImageViewId"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/homeActivityRecordListAccountCircleImageViewId" />
+
+        <TextView
+            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/homeActivityRecordListDurationTextViewId"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/homeActivityRecordListAccountCircleImageViewId"
+            android:text="Duration"
+            android:layout_toEndOf="@+id/homeActivityRecordListAccountCircleImageViewId" />
+        <ImageView
+            android:id="@+id/homeActivityDurationImageViewId"
+            android:src="@drawable/ic_timer_duration"
+            android:layout_toRightOf="@+id/homeActivityRecordListDurationTextViewId"
+            android:layout_width="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_height="10dp"
+            android:layout_toEndOf="@+id/homeActivityRecordListDurationTextViewId" />
+
+        <TextView
+            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:id="@+id/homeActivityRecordListModelNameTextViewId"
+            android:layout_toRightOf="@+id/homeActivityDurationImageViewId"
+            android:text="Hello"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_toLeftOf="@+id/homeActivityRecordListTimeTextViewId"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/homeActivityRecordListTimeTextViewId"
+            android:layout_toEndOf="@+id/homeActivityDurationImageViewId" />
+
+        <TextView
+            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/homeActivityRecordListTimeTextViewId"
+            android:text="Time"
+            android:layout_toLeftOf="@+id/homeActivityTimeImageViewId"
+            android:layout_toStartOf="@+id/homeActivityTimeImageViewId" />
+
+        <ImageView
+            android:id="@+id/homeActivityTimeImageViewId"
+            android:src="@drawable/ic_access_time"
+            android:layout_toLeftOf="@+id/homeActivityRecordListModelPlayIconImageViewId"
+            android:layout_alignParentBottom="true"
+            android:layout_width="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="10dp"
+            android:layout_toStartOf="@+id/homeActivityRecordListModelPlayIconImageViewId" />
+
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:id="@+id/homeActivityRecordListModelPlayIconImageViewId"
+            android:src="@drawable/ic_play_circle"
+            android:layout_toLeftOf="@+id/homeActivityRecordListModelShareImageViewId"
+            android:layout_toStartOf="@+id/homeActivityRecordListModelShareImageViewId"/>
+
+        <ImageView
+            android:layout_marginRight="5dp"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:id="@+id/homeActivityRecordListModelShareImageViewId"
+            android:src="@drawable/ic_share"
+            android:layout_toStartOf="@+id/homeActivityRecordListModelDeleteImageViewId"
+            android:layout_toLeftOf="@+id/homeActivityRecordListModelDeleteImageViewId"
+            android:layout_marginEnd="5dp" />
+
+        <ImageView
+            android:id="@+id/homeActivityRecordListModelDeleteImageViewId"
+            android:layout_marginRight="5dp"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_delete_black"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
+

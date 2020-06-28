@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "473581154689",
+    "firebase_url": "https://offer50.firebaseio.com",
+    "project_id": "offer50",
+    "storage_bucket": "offer50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473581154689:android:f76f6f041d9f6d8839f880",
+        "android_client_info": {
+          "package_name": "com.uttam.callrecord.backuppro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473581154689-egks3bk5iq3gv9eu45kh4pprkodvli8t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbVlg9YXyZEyI_kEpZYLJFu6dhSaeC9g4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473581154689-egks3bk5iq3gv9eu45kh4pprkodvli8t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

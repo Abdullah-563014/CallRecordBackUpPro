@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="500dp">
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/parentReferCodeAlertDialogTextViewId"
+            android:text="If your have any refer code, Please input that code here."
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/parentReferCodeAlertDialogEditTextId"
+            android:hint="Type your code here..."
+            android:layout_width="300dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="50dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="2"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/parentReferCodeAlertDialogCancelButtonId"
+                style="@style/ButtonStyle"
+                android:text="Cancel"
+                android:layout_marginRight="5dp"
+                android:textSize="18sp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/parentReferCodeAlertDialogConfirmButtonId"
+                style="@style/ButtonStyle"
+                android:text="Confirm"
+                android:layout_marginLeft="5dp"
+                android:textSize="18sp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

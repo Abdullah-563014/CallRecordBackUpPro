@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/mainActivityTimeRemainingTextViewId"
+            android:layout_alignParentTop="true"
+            android:text="Time Remaining:- 2592000 seconds"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:shadowDx="4"
+            android:shadowDy="4"
+            android:shadowRadius="4"
+            android:textColor="@color/colorBlack"
+            android:shadowColor="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/mainActivityCouponCodeTextViewId"
+            android:layout_below="@+id/mainActivityTimeRemainingTextViewId"
+            android:text="You coupon code not available yet."
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorBlack"
+            android:shadowColor="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:id="@+id/mainActivityRestartCopyButtonRootId"
+            android:layout_below="@+id/mainActivityCouponCodeTextViewId"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/mainActivityCopyCouponCodeButtonId"
+                android:text="Copy Coupon Code"
+                style="@style/ButtonStyle"
+                android:layout_marginStart="10dp"
+                android:enabled="false"
+                android:layout_marginEnd="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp" />
+            <Button
+                android:id="@+id/mainActivityRestartTimerButtonId"
+                android:text="Restart"
+                style="@style/ButtonStyle"
+                android:layout_marginStart="5dp"
+                android:enabled="false"
+                android:layout_marginEnd="10dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp" />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/mainActivityAdminNoticeImageViewId"
+            android:layout_below="@+id/mainActivityRestartCopyButtonRootId"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_width="300dp"
+            android:layout_height="400dp"/>
+        <Button
+            android:id="@+id/mainActivityAppHiddentButtonId"
+            android:text="Hide App"
+            style="@style/ButtonStyle"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
+</ScrollView>

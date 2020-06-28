@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PrivacyPolicyActivity">
+
+    <TextView
+        android:id="@+id/privacyPolicyHeadingTextViewId"
+        android:layout_alignParentTop="true"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:text="This Apps's Privacy Policy are given below. To use this
+app you need to accept our Privacy Policy. Please Reade carefully our Privacy Policy."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <ScrollView
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/privacyPolicyHeadingTextViewId"
+        android:layout_above="@+id/privacyPolicyCheckBoxId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="@string/privacy_policy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+    <CheckBox
+        android:id="@+id/privacyPolicyCheckBoxId"
+        android:layout_above="@+id/privacyPolicyAcceptButtonId"
+        android:checked="true"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        android:text="Accept Our Privacy Policy Condition To Use This App."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp" />
+    <Button
+        android:id="@+id/privacyPolicyAcceptButtonId"
+        android:text="Accept"
+        android:textSize="18sp"
+        android:background="@drawable/button_background"
+        android:layout_centerInParent="true"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

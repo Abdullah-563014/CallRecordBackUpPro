@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="40dp"
+    android:gravity="center"
+    tools:context=".UserTypeActivity">
+    <Button
+        android:id="@+id/userTypeActivityFirstLuckTryButtonId"
+        style="@style/ButtonStyle"
+        android:background="@drawable/button_ripple_effect"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="First Luck Try"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <Button
+        android:id="@+id/userTypeActivityLastLuckTryButtonId"
+        style="@style/ButtonStyle"
+        android:background="@drawable/button_ripple_effect"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Last Luck Try"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+</LinearLayout>
