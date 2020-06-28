@@ -401,6 +401,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
             int withdrawRupee=Integer.parseInt(paymentAmount);
             if (withdrawRupee<=Integer.parseInt(myBalance)){
                 if (withdrawRupee>=100){
+                    paymentAlertDialog.dismiss();
                     progressBar.setVisibility(View.VISIBLE);
                     WithdrawRequestModelClass requestModelClass=new WithdrawRequestModelClass(userEmail,userName,paymentAmount,paymentMethod,paymentMethodInfo);
                     databaseReference.child("WithdrawRequest").child(databasePath).setValue(requestModelClass)
@@ -449,6 +450,63 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 });
     }
 
+    private void updateMyPaidStatus(String status) {
+        progressBar.setVisibility(View.VISIBLE);
+        databaseReference.child("Users").child(databasePath).child("paidStatus").setValue(status)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(AdminUserHomeActivity.this, "Successfully updated your paid status", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your paid status for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void updateMyPayTime(String time) {
+        progressBar.setVisibility(View.VISIBLE);
+        databaseReference.child("Users").child(databasePath).child("payTime").setValue(time)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(AdminUserHomeActivity.this, "Successfully updated your pay time", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your pay time for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void updateMyExpireTime(String time) {
+        progressBar.setVisibility(View.VISIBLE);
+        databaseReference.child("Users").child(databasePath).child("expireTime").setValue(time)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(AdminUserHomeActivity.this, "Successfully updated your expire time", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your expire time for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     private void updateParentBalance(String amount) {
         if (parentReferCode!=null){
             progressBar.setVisibility(View.VISIBLE);
@@ -488,6 +546,52 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             progressBar.setVisibility(View.GONE);
                             Toast.makeText(AdminUserHomeActivity.this, "Failed to add bonus for "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }else {
+            Toast.makeText(this, "Failed for referer code empty.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateParentPaidRefererCount(String amount) {
+        if (parentReferCode!=null){
+            progressBar.setVisibility(View.VISIBLE);
+            databaseReference.child("Users").child(Utils.getDatabasePathFromTopicOrEmail(parentReferCode)).child("myPaidReferCount")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists() && dataSnapshot.getValue()!=null){
+                                String oldAmount=dataSnapshot.getValue(String.class);
+                                if (oldAmount!=null){
+                                    databaseReference.child("Users").child(Utils.getDatabasePathFromTopicOrEmail(parentReferCode)).child("myPaidReferCount")
+                                            .setValue(String.valueOf((Integer.parseInt(oldAmount)+Integer.parseInt(amount))))
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Toast.makeText(AdminUserHomeActivity.this, "Your referer paid refer count updated successfully.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Toast.makeText(AdminUserHomeActivity.this, "Referer paid refer count update failed for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }else {
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            }else {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(AdminUserHomeActivity.this, "Your referer paid refer count info not available in database.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(AdminUserHomeActivity.this, "Failed to add referer paid refer count for "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }else {
