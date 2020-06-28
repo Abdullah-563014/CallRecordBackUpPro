@@ -53,6 +53,7 @@ public class Utils {
     public static String userPaidStatusKey="UserPaidStatusKey";
     public static String payTimeKey="PayTimeKey";
     public static String expireTimeKey="ExpireTimeKey";
+    public static String recordBlockListNumberKey="RecordBlockListNumberKey";
 
 
 

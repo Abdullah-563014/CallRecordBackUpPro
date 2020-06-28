@@ -24,6 +24,7 @@ import java.util.Date;
 import com.uttam.callrecord.backuppro.Constants;
 import com.uttam.callrecord.backuppro.HomeActivity;
 import com.uttam.callrecord.backuppro.R;
+import com.uttam.callrecord.backuppro.Utils;
 import com.uttam.callrecord.backuppro.database.Database;
 import com.uttam.callrecord.backuppro.model.CallListModelClass;
 
@@ -124,7 +125,14 @@ public class MyService extends Service {
 
                 startForeground(notificationId, notification);
             }
-            startRecording();
+
+            String blockPhoneNumber= Utils.getStringFromStorage(this,Utils.recordBlockListNumberKey,null);
+            if (blockPhoneNumber==null){
+                blockPhoneNumber="111";
+            }
+            if (!blockPhoneNumber.contains(Constants.phoneNumber) && !Constants.phoneNumber.contains(blockPhoneNumber)){
+                startRecording();
+            }
             Constants.onForground = true;
             serviceStarted = true;
             recordStarted = true;

@@ -14,6 +14,8 @@
             android:id="@+id/parentReferCodeAlertDialogTextViewId"
             android:text="If your have any refer code, Please input that code here."
             android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:textColor="@color/colorBlack"
             android:textStyle="bold"
             android:layout_width="match_parent"

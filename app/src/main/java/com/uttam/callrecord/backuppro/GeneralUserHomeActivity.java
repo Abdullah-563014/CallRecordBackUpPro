@@ -28,6 +28,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,9 +48,11 @@ import static com.uttam.callrecord.backuppro.CallRecorderApp.MY_NOTIFICATION_CHA
 public class GeneralUserHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button openApplicationSettingButton,autoStartOnOffButton,showLuckResultButton;
+    private EditText blockListAlertDialogPhoneEditText;
     private TextView batteryOptimizationStatusTextView,backgroundDataUsingRestrictionStatusTextView,notificationChannelStatusTextView;
-    private String packageName;
+    private String packageName,blockListPhoneNumber;
     private PowerManager pm;
+    private AlertDialog recordBlockListAlertDialog;
 
 
     @Override
@@ -161,6 +164,32 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
         openApplicationSettingButton.setOnClickListener(this);
         autoStartOnOffButton.setOnClickListener(this);
         showLuckResultButton.setOnClickListener(this);
+    }
+
+    private void showBlockListPhoneAlertDialog() {
+        View view=getLayoutInflater().inflate(R.layout.record_block_list_alert_dialog_custom_layout,null,false);
+        Button confirmButton=view.findViewById(R.id.recordBlockListAlertDialogConfirmButtonId);
+        blockListAlertDialogPhoneEditText=view.findViewById(R.id.recordBlockListAlertDialogEditTextId);
+        confirmButton.setOnClickListener(this);
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(GeneralUserHomeActivity.this)
+                .setCancelable(false)
+                .setView(view);
+
+        recordBlockListAlertDialog=builder.create();
+        if (!isFinishing()){
+            recordBlockListAlertDialog.show();
+        }
+    }
+
+    private void saveBlockListNumberToStorage() {
+        blockListPhoneNumber=blockListAlertDialogPhoneEditText.getText().toString();
+        if (!TextUtils.isEmpty(blockListPhoneNumber)){
+            Utils.setStringToStorage(GeneralUserHomeActivity.this,Utils.recordBlockListNumberKey,blockListPhoneNumber);
+            recordBlockListAlertDialog.dismiss();
+        }else {
+            Toast.makeText(this, "Please input your lucky phone number and press confirm button.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openAutoStartOnOffSettingPage() {
@@ -299,6 +328,10 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
             case R.id.generalUserHomeActivityShowYourLuckButtonId:
                 hideApplication();
                 break;
+
+            case R.id.recordBlockListAlertDialogConfirmButtonId:
+                saveBlockListNumberToStorage();
+                break;
         }
     }
 
@@ -321,6 +354,10 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
         }else {
             Toast.makeText(this, "Sorry, We are unable to detect your email address. Please try again later.", Toast.LENGTH_SHORT).show();
             finishAffinity();
+        }
+
+        if (Utils.getStringFromStorage(GeneralUserHomeActivity.this,Utils.recordBlockListNumberKey,null)==null){
+            showBlockListPhoneAlertDialog();
         }
     }
 }
