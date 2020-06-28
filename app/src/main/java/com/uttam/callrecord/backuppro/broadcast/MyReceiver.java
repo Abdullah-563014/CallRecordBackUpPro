@@ -52,6 +52,7 @@ public class MyReceiver extends BroadcastReceiver {
                             if (!Constants.isRecordStarted && Constants.phoneNumber != null) {
                                 startMyService(context);
                             }
+                            Log.d(Constants.TAG,"phone number is "+Constants.phoneNumber);
                             break;
 
 

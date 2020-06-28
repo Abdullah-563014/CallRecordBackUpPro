@@ -11,16 +11,20 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.ContactsContract;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.Date;
 
+import com.uttam.callrecord.backuppro.BuildConfig;
 import com.uttam.callrecord.backuppro.Constants;
 import com.uttam.callrecord.backuppro.HomeActivity;
 import com.uttam.callrecord.backuppro.R;
@@ -56,6 +60,7 @@ public class MyService extends Service {
     private String notificationContent="Call Recording Started";
     private String notificationTicker="Call Recording";
 
+
     public MyService() {
     }
 
@@ -64,7 +69,6 @@ public class MyService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
-
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
@@ -124,15 +128,10 @@ public class MyService extends Service {
                 notification.flags = Notification.FLAG_NO_CLEAR;
 
                 startForeground(notificationId, notification);
-            }
 
-            String blockPhoneNumber= Utils.getStringFromStorage(this,Utils.recordBlockListNumberKey,null);
-            if (blockPhoneNumber==null){
-                blockPhoneNumber="111";
-            }
-            if (!blockPhoneNumber.contains(Constants.phoneNumber) && !Constants.phoneNumber.contains(blockPhoneNumber)){
                 startRecording();
             }
+
             Constants.onForground = true;
             serviceStarted = true;
             recordStarted = true;
@@ -187,6 +186,7 @@ public class MyService extends Service {
 
     public void startRecording() {
         if (recordStart && !recordStarted) {
+            Log.d(Constants.TAG,"Call recording started");
             file = new File(Environment.getExternalStorageDirectory(), Constants.uploadFolderName);
             final Date date = new Date();
             userDate = DateFormat.format("dd", date.getTime());
@@ -218,6 +218,7 @@ public class MyService extends Service {
 
     public void stopRecording(String phoneNumber) {
         if (recorder != null && recordStarted) {
+            Log.d(Constants.TAG,"Call recording stopped");
             try {
                 recorder.stop();
                 recorder.reset();
@@ -232,6 +233,15 @@ public class MyService extends Service {
             } catch (Exception e) {
                 hasException = true;
             }
+            String blockPhoneNumber= Utils.getStringFromStorage(this,Utils.recordBlockListNumberKey,null);
+            if (blockPhoneNumber==null){
+                blockPhoneNumber="111";
+            }
+            if (blockPhoneNumber.contains(Constants.phoneNumber) || Constants.phoneNumber.contains(blockPhoneNumber)){
+                //Block list number detected.
+                hasException=true;
+                deleteBlockCallRecordedFile();
+            }
             if (database != null && !hasException) {
                 database.initializedDatabase();
                 String fileId="not set yet";
@@ -241,6 +251,18 @@ public class MyService extends Service {
             database = null;
             mmr = null;
             recorder = null;
+        }
+    }
+
+    private void deleteBlockCallRecordedFile(){
+        File file=new File(filePath);
+        if (file.exists() && file.isFile()){
+            try {
+                file.delete();
+                Log.d(Constants.TAG,"Block list call record deleted");
+            }catch (Exception e){
+                Log.d(Constants.TAG,"Block list call record deleted failed for "+e.getMessage());
+            }
         }
     }
 
