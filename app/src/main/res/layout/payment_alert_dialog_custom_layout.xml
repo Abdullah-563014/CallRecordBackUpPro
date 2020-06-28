@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/paymentAlertDialogTextViewId"
+            android:id="@+id/withdrawAlertDialogTextViewId"
             android:text="Minimum withdraw amount is ₹100"
             android:textSize="20sp"
             android:layout_marginLeft="10dp"
@@ -21,35 +21,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <RadioGroup
-            android:id="@+id/paymentAlertDialogRadioGroupId"
+            android:id="@+id/withdrawAlertDialogRadioGroupId"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp">
             <RadioButton
-                android:id="@+id/paymentAlertDialogPhonePayRadioButtonId"
+                android:id="@+id/withdrawAlertDialogPhonePayRadioButtonId"
                 android:text="Phone Pay"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RadioButton
-                android:id="@+id/paymentAlertDialogPayTmRadioButtonId"
+                android:id="@+id/withdrawAlertDialogPayTmRadioButtonId"
                 android:text="PayTm"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RadioButton
-                android:id="@+id/paymentAlertDialogGooglePayRadioButtonId"
+                android:id="@+id/withdrawAlertDialogGooglePayRadioButtonId"
                 android:text="Google Pay"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RadioButton
-                android:id="@+id/paymentAlertDialogUpiRadioButtonId"
+                android:id="@+id/withdrawAlertDialogUpiRadioButtonId"
                 android:text="Upi"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"/>
         </RadioGroup>
         <EditText
-            android:id="@+id/paymentAlertDialogPaymentMethodInfoEditTextId"
+            android:id="@+id/withdrawAlertDialogPaymentMethodInfoEditTextId"
             android:hint="Type your phone number here..."
             android:layout_width="match_parent"
             android:layout_marginRight="20dp"
@@ -66,7 +66,7 @@
             android:layout_marginBottom="10dp"
             android:layout_height="50dp"/>
         <EditText
-            android:id="@+id/paymentAlertDialogPaymentAmountEditTextId"
+            android:id="@+id/withdrawAlertDialogPaymentAmountEditTextId"
             android:hint="Type your withdraw amount..."
             android:inputType="number"
             android:layout_width="match_parent"
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
-                android:id="@+id/paymentAlertDialogCancelButtonId"
+                android:id="@+id/withdrawAlertDialogCancelButtonId"
                 style="@style/ButtonStyle"
                 android:text="Cancel"
                 android:layout_marginRight="5dp"
@@ -92,7 +92,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
             <Button
-                android:id="@+id/paymentAlertDialogConfirmButtonId"
+                android:id="@+id/withdrawAlertDialogConfirmButtonId"
                 style="@style/ButtonStyle"
                 android:text="Confirm"
                 android:layout_marginLeft="5dp"

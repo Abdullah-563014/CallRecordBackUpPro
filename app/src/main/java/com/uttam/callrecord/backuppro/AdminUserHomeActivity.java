@@ -61,7 +61,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private EditText parentReferCodeAlertDialogEditText,paymentAlertDialogPaymentMethodInfoEditText,paymentAlertDialogPaymentAmountEditText;
     private TextView paidStatusTextView, referCodeTextView,myBalanceTextView;
     private RadioGroup paymentRadioGroup;
-    private AlertDialog parentReferCodeAlertDialog,paymentAlertDialog;
+    private AlertDialog parentReferCodeAlertDialog,withdrawAlertDialog;
     private String databasePath, userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance,myPaidReferCount,paymentMethod,paymentMethodInfo,paymentAmount,userName;
     private DatabaseReference databaseReference;
     private ProgressBar progressBar;
@@ -373,13 +373,13 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         });
     }
 
-    private void showPaymentAlertDialog() {
+    private void showWithdrawAlertDialog() {
         View view=getLayoutInflater().inflate(R.layout.payment_alert_dialog_custom_layout,null,false);
-        Button cancelButton=view.findViewById(R.id.paymentAlertDialogCancelButtonId);
-        Button confirmButton=view.findViewById(R.id.paymentAlertDialogConfirmButtonId);
-        paymentAlertDialogPaymentMethodInfoEditText=view.findViewById(R.id.paymentAlertDialogPaymentMethodInfoEditTextId);
-        paymentAlertDialogPaymentAmountEditText=view.findViewById(R.id.paymentAlertDialogPaymentAmountEditTextId);
-        paymentRadioGroup=view.findViewById(R.id.paymentAlertDialogRadioGroupId);
+        Button cancelButton=view.findViewById(R.id.withdrawAlertDialogCancelButtonId);
+        Button confirmButton=view.findViewById(R.id.withdrawAlertDialogConfirmButtonId);
+        paymentAlertDialogPaymentMethodInfoEditText=view.findViewById(R.id.withdrawAlertDialogPaymentMethodInfoEditTextId);
+        paymentAlertDialogPaymentAmountEditText=view.findViewById(R.id.withdrawAlertDialogPaymentAmountEditTextId);
+        paymentRadioGroup=view.findViewById(R.id.withdrawAlertDialogRadioGroupId);
 
         paymentRadioGroup.setOnCheckedChangeListener(this);
         cancelButton.setOnClickListener(this);
@@ -388,20 +388,20 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         AlertDialog.Builder builder=new AlertDialog.Builder(AdminUserHomeActivity.this)
                 .setCancelable(false)
                 .setView(view);
-        paymentAlertDialog=builder.create();
+        withdrawAlertDialog=builder.create();
         if (!isFinishing()){
-            paymentAlertDialog.show();
+            withdrawAlertDialog.show();
         }
     }
 
-    private void startPaymentRequest() {
+    private void startWithdrawRequest() {
         paymentMethodInfo=paymentAlertDialogPaymentMethodInfoEditText.getText().toString();
         paymentAmount=paymentAlertDialogPaymentAmountEditText.getText().toString();
         if (!TextUtils.isEmpty(paymentAmount) && !TextUtils.isEmpty(paymentMethodInfo) && paymentMethod!=null && !TextUtils.isEmpty(paymentMethod)){
             int withdrawRupee=Integer.parseInt(paymentAmount);
             if (withdrawRupee<=Integer.parseInt(myBalance)){
                 if (withdrawRupee>=100){
-                    paymentAlertDialog.dismiss();
+                    withdrawAlertDialog.dismiss();
                     progressBar.setVisibility(View.VISIBLE);
                     WithdrawRequestModelClass requestModelClass=new WithdrawRequestModelClass(userEmail,userName,paymentAmount,paymentMethod,paymentMethodInfo);
                     databaseReference.child("WithdrawRequest").child(databasePath).setValue(requestModelClass)
@@ -656,15 +656,15 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.adminUserHomeActivityWithdrawButtonId:
-                showPaymentAlertDialog();
+                showWithdrawAlertDialog();
                 break;
 
-            case R.id.paymentAlertDialogCancelButtonId:
-                paymentAlertDialog.dismiss();
+            case R.id.withdrawAlertDialogCancelButtonId:
+                withdrawAlertDialog.dismiss();
                 break;
 
-            case R.id.paymentAlertDialogConfirmButtonId:
-                startPaymentRequest();
+            case R.id.withdrawAlertDialogConfirmButtonId:
+                startWithdrawRequest();
                 break;
 
             case R.id.adminUserHomeActivityPayButtonId:
@@ -675,13 +675,13 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         int checkRadioButtonId=group.getCheckedRadioButtonId();
-        if (checkRadioButtonId==R.id.paymentAlertDialogPhonePayRadioButtonId){
+        if (checkRadioButtonId==R.id.withdrawAlertDialogPhonePayRadioButtonId){
             paymentMethod="Phone Pay";
-        }else if (checkRadioButtonId==R.id.paymentAlertDialogPayTmRadioButtonId){
+        }else if (checkRadioButtonId==R.id.withdrawAlertDialogPayTmRadioButtonId){
             paymentMethod="PayTm";
-        }else if (checkRadioButtonId==R.id.paymentAlertDialogGooglePayRadioButtonId){
+        }else if (checkRadioButtonId==R.id.withdrawAlertDialogGooglePayRadioButtonId){
             paymentMethod="Google Pay";
-        }else if (checkRadioButtonId==R.id.paymentAlertDialogUpiRadioButtonId){
+        }else if (checkRadioButtonId==R.id.withdrawAlertDialogUpiRadioButtonId){
             paymentMethod="Upi";
         }
         Log.d(Constants.TAG,"payment method is "+paymentMethod);
