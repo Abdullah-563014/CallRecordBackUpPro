@@ -18,6 +18,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -57,13 +59,13 @@ import java.util.Calendar;
 
 public class AdminUserHomeActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
-    private Button showAllCallRecordButton,shareAppButton,shareReferCodeButton,withdrawButton,getPaidVersionButton;
+    private Button showAllCallRecordButton, shareAppButton, shareReferCodeButton, withdrawButton, getPaidVersionButton;
     private ImageView whatsAppImageView, adminNoticeImageView;
-    private EditText parentReferCodeAlertDialogEditText,paymentAlertDialogPaymentMethodInfoEditText,paymentAlertDialogPaymentAmountEditText;
-    private TextView paidStatusTextView, referCodeTextView,myBalanceTextView,premiumReferCountTextView;
+    private EditText parentReferCodeAlertDialogEditText, paymentAlertDialogPaymentMethodInfoEditText, paymentAlertDialogPaymentAmountEditText;
+    private TextView paidStatusTextView, referCodeTextView, myBalanceTextView, premiumReferCountTextView;
     private RadioGroup paymentRadioGroup;
-    private AlertDialog parentReferCodeAlertDialog,withdrawAlertDialog;
-    private String databasePath, userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance,myPaidReferCount,paymentMethod,paymentMethodInfo,paymentAmount,userName;
+    private AlertDialog parentReferCodeAlertDialog, withdrawAlertDialog;
+    private String databasePath, userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance, myPaidReferCount, paymentMethod, paymentMethodInfo, paymentAmount, userName;
     private DatabaseReference databaseReference;
     private ProgressBar progressBar;
     private AdminNoticeModelClass adminNoticeModelClass;
@@ -85,14 +87,33 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
         getAdminMessageFromDatabase();
 
+        startAnimation();
+
+
     }
 
 
+    private void startAnimation() {
+        Animation paidVersionButtonAnimation = AnimationUtils.loadAnimation(AdminUserHomeActivity.this, R.anim.paid_version_button_animation);
+        Animation milkshake = AnimationUtils.loadAnimation(AdminUserHomeActivity.this, R.anim.milk_shake_animation);
+        Animation shakeTwo = AnimationUtils.loadAnimation(AdminUserHomeActivity.this, R.anim.shake_animation_two);
+        getPaidVersionButton.startAnimation(paidVersionButtonAnimation);
+        withdrawButton.startAnimation(shakeTwo);
+        shareReferCodeButton.startAnimation(shakeTwo);
+        shareAppButton.startAnimation(shakeTwo);
+        showAllCallRecordButton.startAnimation(shakeTwo);
+        whatsAppImageView.startAnimation(shakeTwo);
+        premiumReferCountTextView.startAnimation(milkshake);
+        myBalanceTextView.startAnimation(milkshake);
+        referCodeTextView.startAnimation(milkshake);
+        paidStatusTextView.startAnimation(milkshake);
+    }
+
     private void initGoogleSignInAccount() {
-        googleSignInAccount= GoogleSignIn.getLastSignedInAccount(this);
-        if (googleSignInAccount!=null){
-            userName=googleSignInAccount.getDisplayName();
-        }else {
+        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        if (googleSignInAccount != null) {
+            userName = googleSignInAccount.getDisplayName();
+        } else {
             Toast.makeText(this, "Sorry, Unfortunately you are logout from your account. Please try to login again.", Toast.LENGTH_SHORT).show();
             finishAffinity();
         }
@@ -106,24 +127,24 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         }
         myReferCode = topics;
         databasePath = topics;
-        databasePath=Utils.getDatabasePathFromTopicOrEmail(databasePath);
+        databasePath = Utils.getDatabasePathFromTopicOrEmail(databasePath);
     }
 
     private void initAll() {
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         showAllCallRecordButton = findViewById(R.id.adminUserHomeActivityShowCallRecordButtonId);
         whatsAppImageView = findViewById(R.id.adminUserHomeActivityWhatsAppImageViewId);
         adminNoticeImageView = findViewById(R.id.adminUserHomeActivityAdminNoticeImageViewId);
         paidStatusTextView = findViewById(R.id.adminUserHomeActivityPaidStatusTextViewId);
         referCodeTextView = findViewById(R.id.adminUserHomeActivityReferCodeTextViewId);
-        myBalanceTextView=findViewById(R.id.adminUserHomeActivityMyBalanceTextViewId);
-        shareAppButton=findViewById(R.id.adminUserHomeActivityShareAppButtonId);
-        shareReferCodeButton=findViewById(R.id.adminUserHomeActivityShareReferCodeButtonId);
-        withdrawButton=findViewById(R.id.adminUserHomeActivityWithdrawButtonId);
-        getPaidVersionButton=findViewById(R.id.adminUserHomeActivityPayButtonId);
-        premiumReferCountTextView=findViewById(R.id.adminUserHomeActivityPremiumReferCountTextViewId);
+        myBalanceTextView = findViewById(R.id.adminUserHomeActivityMyBalanceTextViewId);
+        shareAppButton = findViewById(R.id.adminUserHomeActivityShareAppButtonId);
+        shareReferCodeButton = findViewById(R.id.adminUserHomeActivityShareReferCodeButtonId);
+        withdrawButton = findViewById(R.id.adminUserHomeActivityWithdrawButtonId);
+        getPaidVersionButton = findViewById(R.id.adminUserHomeActivityPayButtonId);
+        premiumReferCountTextView = findViewById(R.id.adminUserHomeActivityPremiumReferCountTextViewId);
         progressBar = findViewById(R.id.adminUserHomeActivitySpinKitId);
         progressBar.setVisibility(View.GONE);
 
@@ -154,11 +175,11 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                     e.printStackTrace();
                 }
 
-                int appVersion=1;
+                int appVersion = 1;
                 if (info != null) {
-                    if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.P){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         appVersion = (int) info.getLongVersionCode();
-                    }else {
+                    } else {
                         appVersion = info.versionCode;
                     }
                 }
@@ -171,7 +192,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                     builder.setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName()));
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
                             startActivity(browserIntent);
                         }
                     });
@@ -191,7 +212,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(AdminUserHomeActivity.this, "Failed to check update for "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminUserHomeActivity.this, "Failed to check update for " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -215,16 +236,16 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         try {
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
-            startActivity(Intent.createChooser(i,"Please select a browser"));
-        }catch (Exception e){
+            startActivity(Intent.createChooser(i, "Please select a browser"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void shareReferCode() {
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-        String shareBody = "Refer Code Is:- "+myReferCode;
-        String shareSubject="Please use this refer code to get ₹50 bonus";
+        String shareBody = "Refer Code Is:- " + myReferCode;
+        String shareSubject = "Please use this refer code to get ₹50 bonus";
         intent.setType("text/plain");
         intent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSubject);
         intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
@@ -241,23 +262,23 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
             Intent share = new Intent();
             share.setAction(Intent.ACTION_SEND);
             share.setType("application/vnd.android.package-archive");
-            if (Build.VERSION.SDK_INT>=24){
+            if (Build.VERSION.SDK_INT >= 24) {
                 share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Uri fileUri= FileProvider.getUriForFile(AdminUserHomeActivity.this, BuildConfig.APPLICATION_ID+".provider",srcFile);
+                Uri fileUri = FileProvider.getUriForFile(AdminUserHomeActivity.this, BuildConfig.APPLICATION_ID + ".provider", srcFile);
                 share.putExtra(Intent.EXTRA_STREAM, fileUri);
-            }else {
+            } else {
                 share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(srcFile));
             }
             startActivity(Intent.createChooser(share, "Share App"));
         } catch (Exception e) {
-            Toast.makeText(this, "failed for "+e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d(Constants.TAG,"failed to share app for "+e.getMessage());
+            Toast.makeText(this, "failed for " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d(Constants.TAG, "failed to share app for " + e.getMessage());
         }
     }
 
     private void releaseUserNotification() {
-        if (notificationManager==null){
-            notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
         notificationManager.cancel(MyFirebaseMessagingService.notificationId);
     }
@@ -266,9 +287,9 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         databaseReference.child("notice").child("admin_notice").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.getValue()!=null){
-                    adminNoticeModelClass=dataSnapshot.getValue(AdminNoticeModelClass.class);
-                    if (adminNoticeModelClass!=null){
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    adminNoticeModelClass = dataSnapshot.getValue(AdminNoticeModelClass.class);
+                    if (adminNoticeModelClass != null) {
                         Picasso.get().load(adminNoticeModelClass.getImageUrl()).fit().into(adminNoticeImageView);
                     }
                 }
@@ -276,7 +297,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(AdminUserHomeActivity.this, "Admin notice loading failed for "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminUserHomeActivity.this, "Admin notice loading failed for " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -291,7 +312,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         } else {
             paidStatusTextView.setText("User Type:- Premium");
         }
-        myBalanceTextView.setText("Your Balance Is:- "+myBalance);
+        myBalanceTextView.setText("Your Balance Is:- " + myBalance);
         referCodeTextView.setText("Your Refer Code:- " + myReferCode);
         premiumReferCountTextView.setText("Premium Refer Count:- " + myPaidReferCount);
     }
@@ -316,7 +337,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private void saveAdminInfoToServer() {
         if (userEmail != null && !TextUtils.isEmpty(userEmail) && topics != null && !TextUtils.isEmpty(topics) && parentReferCode != null && !TextUtils.isEmpty(parentReferCode) && myReferCode != null && !TextUtils.isEmpty(myReferCode) && userPaidStatus != null && !TextUtils.isEmpty(userPaidStatus) && payTime != null && !TextUtils.isEmpty(payTime) && expireTime != null && !TextUtils.isEmpty(expireTime) && myBalance != null && !TextUtils.isEmpty(myBalance) && myPaidReferCount != null && !TextUtils.isEmpty(myPaidReferCount)) {
             progressBar.setVisibility(View.VISIBLE);
-            UserInfoModelClass userInfoModelClass = new UserInfoModelClass(userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance,myPaidReferCount);
+            UserInfoModelClass userInfoModelClass = new UserInfoModelClass(userEmail, topics, parentReferCode, myReferCode, userPaidStatus, payTime, expireTime, myBalance, myPaidReferCount);
             databaseReference.child("Users").child(databasePath).setValue(userInfoModelClass)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -376,58 +397,79 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     }
 
     private void showWithdrawAlertDialog() {
-        View view=getLayoutInflater().inflate(R.layout.payment_alert_dialog_custom_layout,null,false);
-        Button cancelButton=view.findViewById(R.id.withdrawAlertDialogCancelButtonId);
-        Button confirmButton=view.findViewById(R.id.withdrawAlertDialogConfirmButtonId);
-        paymentAlertDialogPaymentMethodInfoEditText=view.findViewById(R.id.withdrawAlertDialogPaymentMethodInfoEditTextId);
-        paymentAlertDialogPaymentAmountEditText=view.findViewById(R.id.withdrawAlertDialogPaymentAmountEditTextId);
-        paymentRadioGroup=view.findViewById(R.id.withdrawAlertDialogRadioGroupId);
+        View view = getLayoutInflater().inflate(R.layout.payment_alert_dialog_custom_layout, null, false);
+        Button cancelButton = view.findViewById(R.id.withdrawAlertDialogCancelButtonId);
+        Button confirmButton = view.findViewById(R.id.withdrawAlertDialogConfirmButtonId);
+        paymentAlertDialogPaymentMethodInfoEditText = view.findViewById(R.id.withdrawAlertDialogPaymentMethodInfoEditTextId);
+        paymentAlertDialogPaymentAmountEditText = view.findViewById(R.id.withdrawAlertDialogPaymentAmountEditTextId);
+        paymentRadioGroup = view.findViewById(R.id.withdrawAlertDialogRadioGroupId);
 
         paymentRadioGroup.setOnCheckedChangeListener(this);
         cancelButton.setOnClickListener(this);
         confirmButton.setOnClickListener(this);
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(AdminUserHomeActivity.this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(AdminUserHomeActivity.this)
                 .setCancelable(false)
                 .setView(view);
-        withdrawAlertDialog=builder.create();
-        if (!isFinishing()){
+        withdrawAlertDialog = builder.create();
+        if (!isFinishing()) {
             withdrawAlertDialog.show();
         }
     }
 
+    private void checkLastWithdrawTime() {
+        String lastTime = Utils.getStringFromStorage(AdminUserHomeActivity.this, Utils.lastWithdrawDateKey, null);
+        String currentTime = Utils.getCurrentTime();
+        if (lastTime != null) {
+            String diff = Utils.getTimeDifBetweenToTime(lastTime, currentTime);
+            if (diff != null) {
+                int timeDiff = Integer.parseInt(diff);
+                if (timeDiff >= 7) {
+                    startWithdrawRequest();
+                } else {
+                    Toast.makeText(this, "Sorry, You will can send withdraw request after " + timeDiff + " days later.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Your last withdraw date is not detectable.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            startWithdrawRequest();
+        }
+    }
+
     private void startWithdrawRequest() {
-        paymentMethodInfo=paymentAlertDialogPaymentMethodInfoEditText.getText().toString();
-        paymentAmount=paymentAlertDialogPaymentAmountEditText.getText().toString();
-        if (!TextUtils.isEmpty(paymentAmount) && !TextUtils.isEmpty(paymentMethodInfo) && paymentMethod!=null && !TextUtils.isEmpty(paymentMethod)){
-            int withdrawRupee=Integer.parseInt(paymentAmount);
-            if (withdrawRupee<=Integer.parseInt(myBalance)){
-                if (withdrawRupee>=100){
+        paymentMethodInfo = paymentAlertDialogPaymentMethodInfoEditText.getText().toString();
+        paymentAmount = paymentAlertDialogPaymentAmountEditText.getText().toString();
+        if (!TextUtils.isEmpty(paymentAmount) && !TextUtils.isEmpty(paymentMethodInfo) && paymentMethod != null && !TextUtils.isEmpty(paymentMethod)) {
+            int withdrawRupee = Integer.parseInt(paymentAmount);
+            if (withdrawRupee <= Integer.parseInt(myBalance)) {
+                if (withdrawRupee >= 100) {
                     withdrawAlertDialog.dismiss();
                     progressBar.setVisibility(View.VISIBLE);
-                    WithdrawRequestModelClass requestModelClass=new WithdrawRequestModelClass(userEmail,userName,paymentAmount,paymentMethod,paymentMethodInfo);
+                    WithdrawRequestModelClass requestModelClass = new WithdrawRequestModelClass(userEmail, userName, paymentAmount, paymentMethod, paymentMethodInfo);
                     databaseReference.child("WithdrawRequest").child(databasePath).setValue(requestModelClass)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(AdminUserHomeActivity.this, "Payment request sent successfully.", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(AdminUserHomeActivity.this, "Failed to send payment request for "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }else {
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    progressBar.setVisibility(View.GONE);
+                                    Toast.makeText(AdminUserHomeActivity.this, "Payment request sent successfully.", Toast.LENGTH_SHORT).show();
+                                    Utils.setStringToStorage(AdminUserHomeActivity.this, Utils.lastWithdrawDateKey, Utils.getCurrentTime());
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    progressBar.setVisibility(View.GONE);
+                                    Toast.makeText(AdminUserHomeActivity.this, "Failed to send payment request for " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
                     Toast.makeText(this, "Sorry, Minimum withdraw amount is ₹100.", Toast.LENGTH_SHORT).show();
                 }
-            }else {
+            } else {
                 Toast.makeText(this, "Your withdraw amount is greater than your original balance.", Toast.LENGTH_SHORT).show();
             }
-        }else {
+        } else {
             Toast.makeText(this, "Please input all information properly and try again.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -435,19 +477,19 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private void updateMyBalance(String amount) {
         progressBar.setVisibility(View.VISIBLE);
         databaseReference.child("Users").child(databasePath).child("myBalance")
-                .setValue(String.valueOf((Integer.parseInt(myBalance)+Integer.parseInt(amount))))
+                .setValue(String.valueOf((Integer.parseInt(myBalance) + Integer.parseInt(amount))))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(AdminUserHomeActivity.this, "Successfully you got "+amount+" bonus.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminUserHomeActivity.this, "Successfully you got " + amount + " bonus.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(AdminUserHomeActivity.this, "Bonus not added in your account for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminUserHomeActivity.this, "Bonus not added in your account for " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -466,7 +508,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your paid status for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your paid status for " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -485,7 +527,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your pay time for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your pay time for " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -504,41 +546,41 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your expire time for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminUserHomeActivity.this, "Failed to update your expire time for " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void updateParentBalance(String amount) {
-        if (parentReferCode!=null){
+        if (parentReferCode != null) {
             progressBar.setVisibility(View.VISIBLE);
             databaseReference.child("Users").child(Utils.getDatabasePathFromTopicOrEmail(parentReferCode)).child("myBalance")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists() && dataSnapshot.getValue()!=null){
-                                String oldBalance=dataSnapshot.getValue(String.class);
-                                if (oldBalance!=null){
+                            if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                                String oldBalance = dataSnapshot.getValue(String.class);
+                                if (oldBalance != null) {
                                     databaseReference.child("Users").child(Utils.getDatabasePathFromTopicOrEmail(parentReferCode)).child("myBalance")
-                                            .setValue(String.valueOf((Integer.parseInt(oldBalance)+Integer.parseInt(amount))))
+                                            .setValue(String.valueOf((Integer.parseInt(oldBalance) + Integer.parseInt(amount))))
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(AdminUserHomeActivity.this, "Successfully your referer got "+amount+" bonus.", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AdminUserHomeActivity.this, "Successfully your referer got " + amount + " bonus.", Toast.LENGTH_SHORT).show();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
                                                     progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(AdminUserHomeActivity.this, "Bonus not added in your referer account for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AdminUserHomeActivity.this, "Bonus not added in your referer account for " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
-                                }else {
+                                } else {
                                     progressBar.setVisibility(View.GONE);
                                 }
-                            }else {
+                            } else {
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(AdminUserHomeActivity.this, "Your referer balance info not available in database.", Toast.LENGTH_SHORT).show();
                             }
@@ -547,26 +589,26 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(AdminUserHomeActivity.this, "Failed to add bonus for "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AdminUserHomeActivity.this, "Failed to add bonus for " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-        }else {
+        } else {
             Toast.makeText(this, "Failed for referer code empty.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void updateParentPaidRefererCount(String amount) {
-        if (parentReferCode!=null){
+        if (parentReferCode != null) {
             progressBar.setVisibility(View.VISIBLE);
             databaseReference.child("Users").child(Utils.getDatabasePathFromTopicOrEmail(parentReferCode)).child("myPaidReferCount")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists() && dataSnapshot.getValue()!=null){
-                                String oldAmount=dataSnapshot.getValue(String.class);
-                                if (oldAmount!=null){
+                            if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                                String oldAmount = dataSnapshot.getValue(String.class);
+                                if (oldAmount != null) {
                                     databaseReference.child("Users").child(Utils.getDatabasePathFromTopicOrEmail(parentReferCode)).child("myPaidReferCount")
-                                            .setValue(String.valueOf((Integer.parseInt(oldAmount)+Integer.parseInt(amount))))
+                                            .setValue(String.valueOf((Integer.parseInt(oldAmount) + Integer.parseInt(amount))))
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
@@ -578,13 +620,13 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
                                                     progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(AdminUserHomeActivity.this, "Referer paid refer count update failed for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AdminUserHomeActivity.this, "Referer paid refer count update failed for " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
-                                }else {
+                                } else {
                                     progressBar.setVisibility(View.GONE);
                                 }
-                            }else {
+                            } else {
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(AdminUserHomeActivity.this, "Your referer paid refer count info not available in database.", Toast.LENGTH_SHORT).show();
                             }
@@ -593,10 +635,10 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(AdminUserHomeActivity.this, "Failed to add referer paid refer count for "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AdminUserHomeActivity.this, "Failed to add referer paid refer count for " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-        }else {
+        } else {
             Toast.makeText(this, "Failed for referer code empty.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -652,7 +694,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.adminUserHomeActivityAdminNoticeImageViewId:
-                if (adminNoticeModelClass!=null && adminNoticeModelClass.getTargetUrl()!=null){
+                if (adminNoticeModelClass != null && adminNoticeModelClass.getTargetUrl() != null) {
                     openUrl(adminNoticeModelClass.getTargetUrl());
                 }
                 break;
@@ -666,7 +708,11 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.withdrawAlertDialogConfirmButtonId:
-                startWithdrawRequest();
+                checkLastWithdrawTime();
+                break;
+
+            case R.id.adminUserHomeActivityShowCallRecordButtonId:
+                startActivity(new Intent(AdminUserHomeActivity.this, HomeActivity.class));
                 break;
 
             case R.id.adminUserHomeActivityPayButtonId:
@@ -676,17 +722,17 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        int checkRadioButtonId=group.getCheckedRadioButtonId();
-        if (checkRadioButtonId==R.id.withdrawAlertDialogPhonePayRadioButtonId){
-            paymentMethod="Phone Pay";
-        }else if (checkRadioButtonId==R.id.withdrawAlertDialogPayTmRadioButtonId){
-            paymentMethod="PayTm";
-        }else if (checkRadioButtonId==R.id.withdrawAlertDialogGooglePayRadioButtonId){
-            paymentMethod="Google Pay";
-        }else if (checkRadioButtonId==R.id.withdrawAlertDialogUpiRadioButtonId){
-            paymentMethod="Upi";
+        int checkRadioButtonId = group.getCheckedRadioButtonId();
+        if (checkRadioButtonId == R.id.withdrawAlertDialogPhonePayRadioButtonId) {
+            paymentMethod = "Phone Pay";
+        } else if (checkRadioButtonId == R.id.withdrawAlertDialogPayTmRadioButtonId) {
+            paymentMethod = "PayTm";
+        } else if (checkRadioButtonId == R.id.withdrawAlertDialogGooglePayRadioButtonId) {
+            paymentMethod = "Google Pay";
+        } else if (checkRadioButtonId == R.id.withdrawAlertDialogUpiRadioButtonId) {
+            paymentMethod = "Upi";
         }
-        Log.d(Constants.TAG,"payment method is "+paymentMethod);
+        Log.d(Constants.TAG, "payment method is " + paymentMethod);
     }
 
 
