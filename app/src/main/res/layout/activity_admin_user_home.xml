@@ -15,7 +15,7 @@
         <TextView
             android:id="@+id/adminUserHomeActivityPaidStatusTextViewId"
             android:layout_alignParentTop="true"
-            android:text="User Type:- Free"
+            android:text="User Type:- "
             android:gravity="center"
             android:layout_marginTop="30dp"
             android:textSize="30sp"

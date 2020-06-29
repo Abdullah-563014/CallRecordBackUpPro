@@ -425,15 +425,17 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
             if (diff != null) {
                 int timeDiff = Integer.parseInt(diff);
                 if (timeDiff >= 7) {
-                    startWithdrawRequest();
+                    showWithdrawAlertDialog();
+                    Log.d(Constants.TAG,"last withdraw time "+timeDiff+" days ago.");
                 } else {
-                    Toast.makeText(this, "Sorry, You will can send withdraw request after " + timeDiff + " days later.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sorry, You will can send withdraw request after " + (7-timeDiff) + " days later.", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(this, "Your last withdraw date is not detectable.", Toast.LENGTH_SHORT).show();
             }
         } else {
-            startWithdrawRequest();
+            showWithdrawAlertDialog();
+            Log.d(Constants.TAG,"last withdraw time is null");
         }
     }
 
@@ -700,7 +702,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.adminUserHomeActivityWithdrawButtonId:
-                showWithdrawAlertDialog();
+                checkLastWithdrawTime();
                 break;
 
             case R.id.withdrawAlertDialogCancelButtonId:
@@ -708,7 +710,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.withdrawAlertDialogConfirmButtonId:
-                checkLastWithdrawTime();
+                startWithdrawRequest();
                 break;
 
             case R.id.adminUserHomeActivityShowCallRecordButtonId:
