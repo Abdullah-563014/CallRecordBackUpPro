@@ -263,6 +263,10 @@ public class HomeActivity extends AppCompatActivity {
                         finish();
                     }
                 });
+        AlertDialog alertDialog=builder.create();
+        if (!isFinishing()){
+            alertDialog.show();
+        }
     }
 
 
