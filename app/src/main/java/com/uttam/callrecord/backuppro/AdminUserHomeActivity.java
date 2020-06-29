@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,6 +55,11 @@ import com.uttam.callrecord.backuppro.model.WithdrawRequestModelClass;
 import com.uttam.callrecord.backuppro.service.MyFirebaseMessagingService;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -72,7 +78,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private AdminNoticeModelClass adminNoticeModelClass;
     private NotificationManager notificationManager;
     private GoogleSignInAccount googleSignInAccount;
-    private final int UPI_PAYMENT=102102;
+    private final int UPI_PAYMENT=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,26 +261,49 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     }
 
     private void shareMyApplication() {
+        ApplicationInfo app = getApplicationContext().getApplicationInfo();
+        String filePath = app.sourceDir;
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("application/vnd.android.package-archive");
+
+        File originalApk = new File(filePath);
         try {
-//            StrictMode.VmPolicy.Builder builder=new StrictMode.VmPolicy.Builder();
-//            StrictMode.setVmPolicy(builder.build());
-            PackageManager pm = getPackageManager();
-            ApplicationInfo ai = pm.getApplicationInfo(getPackageName(), 0);
-            File srcFile = new File(ai.publicSourceDir);
-            Intent share = new Intent();
-            share.setAction(Intent.ACTION_SEND);
-            share.setType("application/vnd.android.package-archive");
-            if (Build.VERSION.SDK_INT >= 24) {
-                share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Uri fileUri = FileProvider.getUriForFile(AdminUserHomeActivity.this, BuildConfig.APPLICATION_ID + ".provider", srcFile);
-                share.putExtra(Intent.EXTRA_STREAM, fileUri);
-            } else {
-                share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(srcFile));
+            File tempFile = new File(getExternalCacheDir() + "/ExtractedApk");
+            if (!tempFile.isDirectory()){
+                if (!tempFile.mkdirs()){
+                    return;
+                }
             }
-            startActivity(Intent.createChooser(share, "Share App"));
-        } catch (Exception e) {
-            Toast.makeText(this, "failed for " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d(Constants.TAG, "failed to share app for " + e.getMessage());
+            tempFile = new File(tempFile.getPath() + "/" + getString(app.labelRes).replace(" ","").toLowerCase() + ".apk");
+            if (!tempFile.exists()) {
+                if (!tempFile.createNewFile()) {
+                    return;
+                }
+            }
+            InputStream in = new FileInputStream(originalApk);
+            OutputStream out = new FileOutputStream(tempFile);
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+
+            if (Build.VERSION.SDK_INT>=24){
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri fileUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", tempFile);
+                intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            }else {
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tempFile));
+            }
+            startActivity(Intent.createChooser(intent, "Share app via"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to share app for "+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -662,6 +691,11 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
 
         Intent upiPayIntent = new Intent(Intent.ACTION_VIEW);
+        if (Build.VERSION.SDK_INT>=24){
+            upiPayIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            Uri fileUri= FileProvider.getUriForFile(AdminUserHomeActivity.this,BuildConfig.APPLICATION_ID+".provider",file);
+//            share.putExtra(Intent.EXTRA_STREAM, fileUri);
+        }
         upiPayIntent.setData(uri);
 
         // will always show a dialog to user to choose an app
@@ -822,7 +856,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.adminUserHomeActivityPayButtonId:
-                payUsingUpi("300","chat.rostbangla@gmail.com",userName,userName+" purchased the premium plan");
+                payUsingUpi("10","Q98610597@ybl",userName,userName+" purchased the premium plan");
                 break;
         }
     }
