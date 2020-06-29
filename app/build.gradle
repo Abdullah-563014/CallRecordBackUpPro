@@ -7,7 +7,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.uttam.callrecord.backuppro"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -72,6 +72,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.shreyaspatil:EasyUpiPayment:2.2'
 
 
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'

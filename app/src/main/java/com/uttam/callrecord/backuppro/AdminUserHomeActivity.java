@@ -47,6 +47,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.shreyaspatil.EasyUpiPayment.EasyUpiPayment;
+import com.shreyaspatil.EasyUpiPayment.listener.PaymentStatusListener;
+import com.shreyaspatil.EasyUpiPayment.model.PaymentApp;
+import com.shreyaspatil.EasyUpiPayment.model.TransactionDetails;
 import com.squareup.picasso.Picasso;
 import com.uttam.callrecord.backuppro.drive.DriveServiceHelper;
 import com.uttam.callrecord.backuppro.model.AdminNoticeModelClass;
@@ -64,7 +68,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-public class AdminUserHomeActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class AdminUserHomeActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, PaymentStatusListener {
 
     private Button showAllCallRecordButton, shareAppButton, shareReferCodeButton, withdrawButton, getPaidVersionButton;
     private ImageView whatsAppImageView, adminNoticeImageView;
@@ -78,7 +82,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private AdminNoticeModelClass adminNoticeModelClass;
     private NotificationManager notificationManager;
     private GoogleSignInAccount googleSignInAccount;
-    private final int UPI_PAYMENT=0;
+    private final int UPI_PAYMENT=123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -681,7 +685,17 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
     private void payUsingUpi(String amount, String upiId, String name, String note) {
 
-        Uri uri = Uri.parse("upi://pay").buildUpon()
+//        Uri uri = Uri.parse("upi://pay").buildUpon()
+//                .appendQueryParameter("pa", upiId)
+//                .appendQueryParameter("pn", name)
+//                .appendQueryParameter("tn", note)
+//                .appendQueryParameter("am", amount)
+//                .appendQueryParameter("cu", "INR")
+//                .build();
+
+        Uri uri = new Uri.Builder()
+                .scheme("upi")
+                .authority("pay")
                 .appendQueryParameter("pa", upiId)
                 .appendQueryParameter("pn", name)
                 .appendQueryParameter("tn", note)
@@ -691,11 +705,11 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
 
         Intent upiPayIntent = new Intent(Intent.ACTION_VIEW);
-        if (Build.VERSION.SDK_INT>=24){
-            upiPayIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//        if (Build.VERSION.SDK_INT>=24){
+//            upiPayIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 //            Uri fileUri= FileProvider.getUriForFile(AdminUserHomeActivity.this,BuildConfig.APPLICATION_ID+".provider",file);
 //            share.putExtra(Intent.EXTRA_STREAM, fileUri);
-        }
+//        }
         upiPayIntent.setData(uri);
 
         // will always show a dialog to user to choose an app
@@ -708,6 +722,26 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
             Toast.makeText(AdminUserHomeActivity.this,"No UPI app found, please install one to continue",Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void payUsingEasyPay(String amount,String upId, String name, String note) {
+        EasyUpiPayment mEasyUpiPayment = new EasyUpiPayment.Builder()
+                .with(this)
+                .setPayeeVpa(upId)
+                .setPayeeName(name)
+                .setTransactionId(topics)
+                .setTransactionRefId(topics)
+                .setDescription(note)
+                .setAmount(amount)
+                .build();
+        mEasyUpiPayment.setPaymentStatusListener(this);
+        mEasyUpiPayment.setDefaultPaymentApp(PaymentApp.NONE);
+        if (mEasyUpiPayment.isDefaultAppExist()) {
+            onAppNotFound();
+            Log.d(Constants.TAG,"upi app not found");
+            return;
+        }
+        mEasyUpiPayment.startPayment();
     }
 
     @Override
@@ -773,7 +807,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 //Code to handle successful transaction here.
                 Toast.makeText(AdminUserHomeActivity.this, "Transaction successful.", Toast.LENGTH_SHORT).show();
                 Log.d(Constants.TAG, "responseStr: "+approvalRefNo);
-            } else if("Payment cancelled by user.".equals(paymentCancel)) {
+            } else if("Payment cancelled by user.".equalsIgnoreCase(paymentCancel)) {
                 Toast.makeText(AdminUserHomeActivity.this, "Payment cancelled by user.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(AdminUserHomeActivity.this, "Transaction failed.Please try again", Toast.LENGTH_SHORT).show();
@@ -856,7 +890,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.adminUserHomeActivityPayButtonId:
-                payUsingUpi("10","Q98610597@ybl",userName,userName+" purchased the premium plan");
+                payUsingEasyPay("10.01","test@axisbank","Test Merchant","test transaction note");
                 break;
         }
     }
@@ -877,4 +911,33 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     }
 
 
+    @Override
+    public void onTransactionCompleted(TransactionDetails transactionDetails) {
+        Log.d(Constants.TAG,"transaction completed and info is "+transactionDetails.toString());
+    }
+
+    @Override
+    public void onTransactionSuccess() {
+        Log.d(Constants.TAG,"transaction successful");
+    }
+
+    @Override
+    public void onTransactionSubmitted() {
+        Log.d(Constants.TAG,"transaction submitted");
+    }
+
+    @Override
+    public void onTransactionFailed() {
+        Log.d(Constants.TAG,"transaction failed");
+    }
+
+    @Override
+    public void onTransactionCancelled() {
+        Log.d(Constants.TAG,"transaction canceled");
+    }
+
+    @Override
+    public void onAppNotFound() {
+        Log.d(Constants.TAG,"transaction app not found");
+    }
 }
