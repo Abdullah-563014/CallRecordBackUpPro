@@ -8,6 +8,13 @@
         recording data from this record list very soon.
     </string>
 
+    <string name="record_download_limit_excess_message">
+        In free mode, Daily you will can download 2 call record from your victim phone. If you want to cross this
+        limitation, Please Purchased the premium features. In premium features you will can hear all
+        call record from your victim phone without any limitation (To purchase Premium features, Please
+        press 'OK' button and after reaching the 'HOME' page, Click on 'GET PAID VERSION' button).
+    </string>
+
     <string name="privacy_policy">
         Privacy Policy:-
 

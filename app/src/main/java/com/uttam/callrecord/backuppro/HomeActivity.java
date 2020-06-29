@@ -50,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPagerAdapter viewPagerAdapter;
     public DriveServiceHelper driveServiceHelper;
     public List<DatabaseModelClass> databaseModelClassArrayList=new ArrayList<>();
+    private String userPaidStatus,todayTotalRecordDownload,recordLastDownloadTime;
 
 
     @Override
@@ -105,11 +106,11 @@ public class HomeActivity extends AppCompatActivity {
 //            startActivity(intent);
             try {
                 PackageManager pm = getPackageManager();
-                PackageInfo info=pm.getPackageInfo("com.maxfour.music.debug", PackageManager.GET_ACTIVITIES);
+                PackageInfo info=pm.getPackageInfo("com.google.android.music", PackageManager.GET_ACTIVITIES);
                 Log.d(Constants.TAG,"package info is "+info.activities.length);
                 Intent intent = new Intent();
                 intent.setAction(android.content.Intent.ACTION_VIEW);
-                intent.setPackage("com.maxfour.music.debug");
+                intent.setPackage("com.google.android.music");
 
                 if (Build.VERSION.SDK_INT>=24){
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -128,7 +129,7 @@ public class HomeActivity extends AppCompatActivity {
                 Log.d(Constants.TAG,"failed to start music player for "+e.getMessage());
             }
         }else {
-            alertDialogForDownloadingFileFromDrive(fileId,filePath);
+            initDownloadOperation(fileId,filePath);
         }
 
     }
@@ -177,7 +178,7 @@ public class HomeActivity extends AppCompatActivity {
             }
             startActivity(Intent.createChooser(share, "Share Recorded File"));
         }else {
-            alertDialogForDownloadingFileFromDrive(fileId,filePath);
+            initDownloadOperation(fileId,filePath);
         }
 
     }
@@ -213,6 +214,55 @@ public class HomeActivity extends AppCompatActivity {
         if (!isFinishing()){
             alertDialog.show();
         }
+    }
+
+    private void initDownloadOperation(String fileId, String filePath) {
+        userPaidStatus=Utils.getStringFromStorage(HomeActivity.this, Utils.userPaidStatusKey,null);
+        todayTotalRecordDownload=Utils.getStringFromStorage(HomeActivity.this, Utils.todayTotalRecordDownloadKey,null);
+        recordLastDownloadTime=Utils.getStringFromStorage(HomeActivity.this, Utils.recordLastDownloadTimeKey,null);
+        if (todayTotalRecordDownload==null){
+            todayTotalRecordDownload="0";
+        }
+
+        if (userPaidStatus!=null){
+            if (userPaidStatus.equalsIgnoreCase("false")){
+                if (recordLastDownloadTime!=null && recordLastDownloadTime.equalsIgnoreCase(Utils.getCurrentTime())){
+                    int downloadCount=Integer.parseInt(todayTotalRecordDownload);
+                    if (downloadCount<=1){
+                        alertDialogForDownloadingFileFromDrive(fileId,filePath);
+                    }else {
+                        recordDownloadLimitExcessAlertDialog();
+                    }
+                }else {
+                    Utils.setStringToStorage(HomeActivity.this,Utils.todayTotalRecordDownloadKey,"0");
+                    alertDialogForDownloadingFileFromDrive(fileId,filePath);
+                }
+            }else {
+                alertDialogForDownloadingFileFromDrive(fileId,filePath);
+            }
+        }else {
+            Toast.makeText(this, "Sorry your paid status is unable to detect, Please try again later.", Toast.LENGTH_SHORT).show();
+            finishAffinity();
+        }
+    }
+
+    private void recordDownloadLimitExcessAlertDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(HomeActivity.this)
+                .setCancelable(false)
+                .setMessage(getResources().getString(R.string.record_download_limit_excess_message))
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
     }
 
 

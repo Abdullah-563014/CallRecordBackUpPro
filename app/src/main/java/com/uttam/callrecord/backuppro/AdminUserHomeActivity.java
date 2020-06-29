@@ -315,6 +315,9 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         myBalanceTextView.setText("Your Balance Is:- " + myBalance);
         referCodeTextView.setText("Your Refer Code:- " + myReferCode);
         premiumReferCountTextView.setText("Premium Refer Count:- " + myPaidReferCount);
+
+        Utils.setStringToStorage(AdminUserHomeActivity.this, Utils.parentReferCodeKey, parentReferCode);
+        Utils.setStringToStorage(AdminUserHomeActivity.this, Utils.userPaidStatusKey, userPaidStatus);
     }
 
     private void showParentReferCodeAlertDialog() {

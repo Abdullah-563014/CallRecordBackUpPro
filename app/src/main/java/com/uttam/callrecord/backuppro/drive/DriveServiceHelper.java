@@ -136,15 +136,19 @@ public class DriveServiceHelper {
 
     public void downloadDriveFile(Context context, String fileId, String fileNameAndPath) {
 
+        String todayTotalRecordDownload=Utils.getStringFromStorage(context, Utils.todayTotalRecordDownloadKey,"0");
+
         Tasks.call(executor,()->{
             try{
                 OutputStream output = new FileOutputStream(fileNameAndPath);
-                myDriveService.files().get(fileId)
-                        .executeMediaAndDownloadTo(output);
+                myDriveService.files().get(fileId).executeMediaAndDownloadTo(output);
                 output.flush();
                 output.close();
                 Log.d(Constants.TAG,"download successful");
                 handler.post(new ToastRunnable(context,"Download successful"));
+                Utils.setStringToStorage(context,Utils.recordLastDownloadTimeKey,Utils.getCurrentTime());
+                Utils.setStringToStorage(context,Utils.todayTotalRecordDownloadKey,String.valueOf((Integer.parseInt(todayTotalRecordDownload)+1)));
+
                 if (homeActivity==null){
                     homeActivity= (HomeActivity) context;
                 }

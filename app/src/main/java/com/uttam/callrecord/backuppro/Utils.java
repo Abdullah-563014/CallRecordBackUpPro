@@ -55,6 +55,8 @@ public class Utils {
     public static String expireTimeKey="ExpireTimeKey";
     public static String lastWithdrawDateKey="LastWithdrawDateKey";
     public static String currentTimeKey="CurrentTimeKey";
+    public static String recordLastDownloadTimeKey="RecordLastDownloadTimeKey";
+    public static String todayTotalRecordDownloadKey="TodayTotalRecordDownloadKey";
     public static String recordBlockListNumberKey="RecordBlockListNumberKey";
 
 
