@@ -833,7 +833,9 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onDestroy() {
-        mEasyUpiPayment.detachListener();
+        if (mEasyUpiPayment!=null){
+            mEasyUpiPayment.detachListener();
+        }
         super.onDestroy();
     }
 
@@ -897,7 +899,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.adminUserHomeActivityPayButtonId:
-                payUsingEasyPay("10.00","Q98610597@ybl",userName,userName+" purchased the premium features");
+                payUsingEasyPay("300.00","Q98610597@ybl",userName,userName+" purchased the premium features");
                 break;
         }
     }
