@@ -897,7 +897,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.adminUserHomeActivityPayButtonId:
-                payUsingEasyPay("10.01","test@axisbank","Test Merchant","test transaction note");
+                payUsingEasyPay("10","Q98610597@ybl",userName,userName+" purchased the premium features");
                 break;
         }
     }
