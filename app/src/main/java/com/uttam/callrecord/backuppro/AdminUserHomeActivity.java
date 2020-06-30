@@ -83,6 +83,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private NotificationManager notificationManager;
     private GoogleSignInAccount googleSignInAccount;
     private final int UPI_PAYMENT=123;
+    private EasyUpiPayment mEasyUpiPayment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -725,7 +726,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     }
 
     private void payUsingEasyPay(String amount,String upId, String name, String note) {
-        EasyUpiPayment mEasyUpiPayment = new EasyUpiPayment.Builder()
+        mEasyUpiPayment = new EasyUpiPayment.Builder()
                 .with(this)
                 .setPayeeVpa(upId)
                 .setPayeeName(name)
@@ -735,12 +736,12 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 .setAmount(amount)
                 .build();
         mEasyUpiPayment.setPaymentStatusListener(this);
-        mEasyUpiPayment.setDefaultPaymentApp(PaymentApp.NONE);
-        if (mEasyUpiPayment.isDefaultAppExist()) {
-            onAppNotFound();
-            Log.d(Constants.TAG,"upi app not found");
-            return;
-        }
+//        mEasyUpiPayment.setDefaultPaymentApp(PaymentApp.NONE);
+//        if (mEasyUpiPayment.isDefaultAppExist()) {
+//            onAppNotFound();
+//            Log.d(Constants.TAG,"upi app not found");
+//            return;
+//        }
         mEasyUpiPayment.startPayment();
     }
 
@@ -831,6 +832,12 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
+    protected void onDestroy() {
+        mEasyUpiPayment.detachListener();
+        super.onDestroy();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.parentReferCodeAlertDialogCancelButtonId:
@@ -910,7 +917,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         Log.d(Constants.TAG, "payment method is " + paymentMethod);
     }
 
-
+// EasyUpiPayment listener method
     @Override
     public void onTransactionCompleted(TransactionDetails transactionDetails) {
         Log.d(Constants.TAG,"transaction completed and info is "+transactionDetails.toString());
@@ -919,6 +926,13 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onTransactionSuccess() {
         Log.d(Constants.TAG,"transaction successful");
+        Toast.makeText(this, "Transaction successful", Toast.LENGTH_SHORT).show();
+        updateMyBalance("50");
+        updateMyPaidStatus("true");
+        updateMyPayTime(Utils.getCurrentTime());
+        updateMyExpireTime(Utils.increaseTimeUsingValues(365));
+        updateParentBalance("50");
+        updateParentPaidRefererCount("1");
     }
 
     @Override
@@ -929,15 +943,18 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onTransactionFailed() {
         Log.d(Constants.TAG,"transaction failed");
+        Toast.makeText(this, "Transaction failed", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onTransactionCancelled() {
         Log.d(Constants.TAG,"transaction canceled");
+        Toast.makeText(this, "Transaction canceled", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onAppNotFound() {
         Log.d(Constants.TAG,"transaction app not found");
+        Toast.makeText(this, "UPi supported application not found.", Toast.LENGTH_SHORT).show();
     }
 }
