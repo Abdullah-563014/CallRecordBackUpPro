@@ -698,12 +698,12 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                     userPaidStatus="false";
                     Utils.setStringToStorage(AdminUserHomeActivity.this,Utils.userPaidStatusKey,"false");
                 }else {
+                    getPaidVersionButton.clearAnimation();
                     getPaidVersionButton.setEnabled(false);
                     userPaidStatus="true";
                     Utils.setStringToStorage(AdminUserHomeActivity.this,Utils.userPaidStatusKey,"true");
                 }
                 Log.d(Constants.TAG,"pay time to current time difference is "+currentDiff);
-                updateUserInfoToTextView();
             }
         }else {
             getPaidVersionButton.setEnabled(true);
@@ -711,6 +711,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
             getPaidVersionButton.startAnimation(paidVersionButtonAnimation);
             userPaidStatus="false";
         }
+        updateUserInfoToTextView();
     }
 
     private void payUsingEasyPay(String amount,String upId, String name, String note) {
@@ -814,7 +815,11 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.adminUserHomeActivityPayButtonId:
-                payUsingEasyPay("300.00","Q98610597@ybl",userName,userName+" purchased the premium features");
+                if (userPaidStatus!=null && userPaidStatus.equalsIgnoreCase("true")){
+                    Toast.makeText(this, "You already a premium user.", Toast.LENGTH_SHORT).show();
+                }else {
+                    payUsingEasyPay("300.00","Q98610597@ybl",userName,userName+" purchased the premium features");
+                }
                 break;
         }
     }
