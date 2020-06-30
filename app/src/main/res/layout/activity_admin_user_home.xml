@@ -157,13 +157,5 @@
             android:layout_marginBottom="20dp"
             android:layout_width="300dp"
             android:layout_height="400dp"/>
-        <com.github.ybq.android.spinkit.SpinKitView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adminUserHomeActivitySpinKitId"
-            style="@style/SpinKitView.Large.Circle"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:SpinKit_Color="@color/colorAccent" />
     </RelativeLayout>
 </ScrollView>

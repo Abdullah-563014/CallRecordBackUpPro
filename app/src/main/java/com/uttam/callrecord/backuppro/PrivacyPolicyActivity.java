@@ -1,7 +1,9 @@
 package com.uttam.callrecord.backuppro;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,8 +30,11 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (checkBox.isChecked()){
                     Utils.setBooleanToStorage(getApplicationContext(),Utils.privacyPolicyKey,true);
-                    startActivity(new Intent(PrivacyPolicyActivity.this,LoginActivity.class));
-                    finish();
+                    if (Utils.haveInternet(PrivacyPolicyActivity.this)){
+                        gotoLoginActivity();
+                    }else {
+                        noInternetAlertDialog();
+                    }
                 }else {
                     Toast.makeText(PrivacyPolicyActivity.this, "Please Accept our Privacy Policy to continue this app.", Toast.LENGTH_SHORT).show();
                 }
@@ -37,9 +42,30 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         });
     }
 
+    private void gotoLoginActivity() {
+        startActivity(new Intent(PrivacyPolicyActivity.this,LoginActivity.class));
+        finish();
+    }
+
     private void initAll() {
         checkBox=findViewById(R.id.privacyPolicyCheckBoxId);
         acceptButton=findViewById(R.id.privacyPolicyAcceptButtonId);
+    }
+
+    private void noInternetAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PrivacyPolicyActivity.this)
+                .setMessage("No internet connection. Please check your internet connect and try again.")
+                .setCancelable(false)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        if (!isFinishing()){
+            alertDialog.show();
+        }
     }
 
     @Override
