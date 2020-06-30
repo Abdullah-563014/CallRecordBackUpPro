@@ -85,6 +85,8 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
     private final int UPI_PAYMENT=123;
     private EasyUpiPayment mEasyUpiPayment;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,10 +109,9 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 
 
     private void startAnimation() {
-        Animation paidVersionButtonAnimation = AnimationUtils.loadAnimation(AdminUserHomeActivity.this, R.anim.paid_version_button_animation);
         Animation milkshake = AnimationUtils.loadAnimation(AdminUserHomeActivity.this, R.anim.milk_shake_animation);
         Animation shakeTwo = AnimationUtils.loadAnimation(AdminUserHomeActivity.this, R.anim.shake_animation_two);
-        getPaidVersionButton.startAnimation(paidVersionButtonAnimation);
+
         withdrawButton.startAnimation(shakeTwo);
         shareReferCodeButton.startAnimation(shakeTwo);
         shareAppButton.startAnimation(shakeTwo);
@@ -422,6 +423,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                         myPaidReferCount = modelClass.getMyPaidReferCount();
                     }
                     updateUserInfoToTextView();
+                    checkUserIsPremiumOrNot();
                 } else {
                     showParentReferCodeAlertDialog();
                 }
@@ -684,45 +686,31 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void payUsingUpi(String amount, String upiId, String name, String note) {
-
-//        Uri uri = Uri.parse("upi://pay").buildUpon()
-//                .appendQueryParameter("pa", upiId)
-//                .appendQueryParameter("pn", name)
-//                .appendQueryParameter("tn", note)
-//                .appendQueryParameter("am", amount)
-//                .appendQueryParameter("cu", "INR")
-//                .build();
-
-        Uri uri = new Uri.Builder()
-                .scheme("upi")
-                .authority("pay")
-                .appendQueryParameter("pa", upiId)
-                .appendQueryParameter("pn", name)
-                .appendQueryParameter("tn", note)
-                .appendQueryParameter("am", amount)
-                .appendQueryParameter("cu", "INR")
-                .build();
-
-
-        Intent upiPayIntent = new Intent(Intent.ACTION_VIEW);
-//        if (Build.VERSION.SDK_INT>=24){
-//            upiPayIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            Uri fileUri= FileProvider.getUriForFile(AdminUserHomeActivity.this,BuildConfig.APPLICATION_ID+".provider",file);
-//            share.putExtra(Intent.EXTRA_STREAM, fileUri);
-//        }
-        upiPayIntent.setData(uri);
-
-        // will always show a dialog to user to choose an app
-        Intent chooser = Intent.createChooser(upiPayIntent, "Pay with");
-
-        // check if intent resolves
-        if(null != chooser.resolveActivity(getPackageManager())) {
-            startActivityForResult(chooser, UPI_PAYMENT);
-        } else {
-            Toast.makeText(AdminUserHomeActivity.this,"No UPI app found, please install one to continue",Toast.LENGTH_SHORT).show();
+    private void checkUserIsPremiumOrNot() {
+        if (payTime!=null && !payTime.equalsIgnoreCase("0")){
+            String diff=Utils.getTimeDifBetweenToTime(payTime,Utils.getCurrentTime());
+            if (diff!=null){
+                int currentDiff=Integer.parseInt(diff);
+                if (currentDiff>365){
+                    getPaidVersionButton.setEnabled(true);
+                    Animation paidVersionButtonAnimation = AnimationUtils.loadAnimation(AdminUserHomeActivity.this, R.anim.paid_version_button_animation);
+                    getPaidVersionButton.startAnimation(paidVersionButtonAnimation);
+                    userPaidStatus="false";
+                    Utils.setStringToStorage(AdminUserHomeActivity.this,Utils.userPaidStatusKey,"false");
+                }else {
+                    getPaidVersionButton.setEnabled(false);
+                    userPaidStatus="true";
+                    Utils.setStringToStorage(AdminUserHomeActivity.this,Utils.userPaidStatusKey,"true");
+                }
+                Log.d(Constants.TAG,"pay time to current time difference is "+currentDiff);
+                updateUserInfoToTextView();
+            }
+        }else {
+            getPaidVersionButton.setEnabled(true);
+            Animation paidVersionButtonAnimation = AnimationUtils.loadAnimation(AdminUserHomeActivity.this, R.anim.paid_version_button_animation);
+            getPaidVersionButton.startAnimation(paidVersionButtonAnimation);
+            userPaidStatus="false";
         }
-
     }
 
     private void payUsingEasyPay(String amount,String upId, String name, String note) {
@@ -743,79 +731,6 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
 //            return;
 //        }
         mEasyUpiPayment.startPayment();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case UPI_PAYMENT:
-                if ((RESULT_OK == resultCode) || (resultCode == 11)) {
-                    if (data != null) {
-                        String trxt = data.getStringExtra("response");
-                        Log.d(Constants.TAG, "onActivityResult: " + trxt);
-                        ArrayList<String> dataList = new ArrayList<>();
-                        dataList.add(trxt);
-                        upiPaymentDataOperation(dataList);
-                    } else {
-                        Log.d(Constants.TAG, "onActivityResult: Return data is null");
-                        ArrayList<String> dataList = new ArrayList<>();
-                        dataList.add("nothing");
-                        upiPaymentDataOperation(dataList);
-                    }
-                } else {
-                    Log.d(Constants.TAG, "onActivityResult: Return data is null"); //when user simply back without payment
-                    ArrayList<String> dataList = new ArrayList<>();
-                    dataList.add("nothing");
-                    upiPaymentDataOperation(dataList);
-                }
-                break;
-        }
-    }
-
-    private void upiPaymentDataOperation(ArrayList<String> data) {
-        if (Utils.haveInternet(AdminUserHomeActivity.this)) {
-            String str = data.get(0);
-            Log.d(Constants.TAG, "upiPaymentDataOperation: "+str);
-            String paymentCancel = "";
-            if(str == null){
-                str = "discard";
-            }
-            String status = "";
-            String approvalRefNo = "";
-            if (str.contains("&")){
-                String response[] = str.split("&");
-                for (int i = 0; i < response.length; i++) {
-                    if (response[i].contains("=")){
-                        String equalStr[] = response[i].split("=");
-                        if(equalStr.length >= 2) {
-                            if (equalStr[0].toLowerCase().equals("Status".toLowerCase())) {
-                                status = equalStr[1].toLowerCase();
-                            }
-                            else if (equalStr[0].toLowerCase().equals("ApprovalRefNo".toLowerCase()) || equalStr[0].toLowerCase().equals("txnRef".toLowerCase())) {
-                                approvalRefNo = equalStr[1];
-                            }
-                        } else {
-                            paymentCancel = "Payment cancelled by user.";
-                        }
-                    }
-                }
-            }
-
-
-            if (status.equals("success")) {
-                //Code to handle successful transaction here.
-                Toast.makeText(AdminUserHomeActivity.this, "Transaction successful.", Toast.LENGTH_SHORT).show();
-                Log.d(Constants.TAG, "responseStr: "+approvalRefNo);
-            } else if("Payment cancelled by user.".equalsIgnoreCase(paymentCancel)) {
-                Toast.makeText(AdminUserHomeActivity.this, "Payment cancelled by user.", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(AdminUserHomeActivity.this, "Transaction failed.Please try again", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(AdminUserHomeActivity.this, "Internet connection is not available. Please check your internet connection and try again", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -935,6 +850,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         updateMyExpireTime(Utils.increaseTimeUsingValues(365));
         updateParentBalance("50");
         updateParentPaidRefererCount("1");
+        getPaidVersionButton.clearAnimation();
     }
 
     @Override
