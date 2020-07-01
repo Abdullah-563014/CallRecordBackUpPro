@@ -128,6 +128,9 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (googleSignInAccount != null) {
             userName = googleSignInAccount.getDisplayName();
+            if (userName==null || TextUtils.isEmpty(userName)){
+                userName="User Name Not Detected";
+            }
         } else {
             Toast.makeText(this, "Sorry, Unfortunately you are logout from your account. Please try to login again.", Toast.LENGTH_SHORT).show();
             finishAffinity();
