@@ -24,7 +24,7 @@ public class MyReceiver extends BroadcastReceiver {
     TelephonyManager telephonyManager;
     PhoneStateListener listener;
     private RecordTimerThread recordTimerThread;
-    private int counter=300;
+    private int counter=7200;
 
 
 
@@ -85,7 +85,7 @@ public class MyReceiver extends BroadcastReceiver {
             recordTimerThread.interrupt();
             recordTimerThread=null;
         }
-        counter=300;
+        counter=7200;
     }
 
     private void startMyService(Context context) {
@@ -102,6 +102,7 @@ public class MyReceiver extends BroadcastReceiver {
                 recordTimerThread.interrupt();
                 recordTimerThread=null;
             }
+            counter=7200;
             recordTimerThread=new RecordTimerThread(context);
             recordTimerThread.start();
         }
@@ -127,7 +128,7 @@ public class MyReceiver extends BroadcastReceiver {
         @Override
         public void run() {
             counter=0;
-            while (counter<=300){
+            while (counter<=7200){
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

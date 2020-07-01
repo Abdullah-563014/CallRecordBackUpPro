@@ -179,7 +179,7 @@ public class AllCallFragment extends Fragment {
                                 }
                             }
                         }
-                        if (allData.size()>=1000){
+                        if (allData.size()>=30){
                             showRecordExcessAlertDialog();
                         }
                         categorizedUserAllData();
