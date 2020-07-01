@@ -48,7 +48,7 @@ import static com.uttam.callrecord.backuppro.CallRecorderApp.MY_NOTIFICATION_CHA
 
 public class GeneralUserHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button openApplicationSettingButton, autoStartOnOffButton, showLuckResultButton, openBatteryOptimizationSettingButton, openBackgroundDataRestrictionSettingButton, openNotificationSettingButton;
+    private Button openApplicationSettingButton, autoStartOnOffButton, showLuckResultButton, disableBatteryOptimizationButton, openBackgroundDataRestrictionSettingButton, openNotificationSettingButton;
     private EditText blockListAlertDialogPhoneEditText;
     private TextView batteryOptimizationStatusTextView, backgroundDataUsingRestrictionStatusTextView, notificationChannelStatusTextView;
     private String packageName, blockListPhoneNumber;
@@ -124,8 +124,9 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 NotificationChannel channel = manager.getNotificationChannel(MY_NOTIFICATION_CHANNEL_ID);
                 Constants.isNotificationChannelEnable = channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
+            }else {
+                Constants.isNotificationChannelEnable = false;
             }
-            Constants.isNotificationChannelEnable = false;
         } else {
             Constants.isNotificationChannelEnable = NotificationManagerCompat.from(this).areNotificationsEnabled();
         }
@@ -161,16 +162,16 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
         autoStartOnOffButton = findViewById(R.id.generalUserHomeActivityOpenAutoStartOnOffSettingButtonId);
         showLuckResultButton = findViewById(R.id.generalUserHomeActivityShowYourLuckButtonId);
         notificationChannelStatusTextView = findViewById(R.id.generalUserHomeActivityNotificationChannelStatusTextViewId);
-        openBatteryOptimizationSettingButton = findViewById(R.id.generalUserHomeActivityBatteryOptimizationSettingButtonId);
         openBackgroundDataRestrictionSettingButton = findViewById(R.id.generalUserHomeActivityBackgroundDataRestrictionSettingButtonId);
         openNotificationSettingButton = findViewById(R.id.generalUserHomeActivityAppNotificationSettingButtonId);
+        disableBatteryOptimizationButton=findViewById(R.id.generalUserHomeActivityDisableBatteryOptimizationSettingButtonId);
 
         openApplicationSettingButton.setOnClickListener(this);
         autoStartOnOffButton.setOnClickListener(this);
         showLuckResultButton.setOnClickListener(this);
-        openBatteryOptimizationSettingButton.setOnClickListener(this);
         openBackgroundDataRestrictionSettingButton.setOnClickListener(this);
         openNotificationSettingButton.setOnClickListener(this);
+        disableBatteryOptimizationButton.setOnClickListener(this);
     }
 
     private void showBlockListPhoneAlertDialog() {
@@ -323,23 +324,27 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
 
     private void openBatteryOptimizationSetting() {
         if (Build.VERSION.SDK_INT >= 23) {
-            Intent intent = new Intent();
-            intent.setData(Uri.parse("package:" + getPackageName()));
-            if (Build.MANUFACTURER.equalsIgnoreCase("samsung")) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
-                    intent.setComponent(new ComponentName("com.samsung.android.lool", "com.samsung.android.sm.ui.battery.BatteryActivity"));
-                } else {
-                    intent.setComponent(new ComponentName("com.samsung.android.sm", "com.samsung.android.sm.ui.battery.BatteryActivity"));
-                }
+            if (Constants.isDisableBatteryOptimization){
+                Toast.makeText(this, "Already disable battery optimization.", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent = new Intent();
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                if (Build.MANUFACTURER.equalsIgnoreCase("samsung")) {
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+                        intent.setComponent(new ComponentName("com.samsung.android.lool", "com.samsung.android.sm.ui.battery.BatteryActivity"));
+                    } else {
+                        intent.setComponent(new ComponentName("com.samsung.android.sm", "com.samsung.android.sm.ui.battery.BatteryActivity"));
+                    }
 
-            } else {
-                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            }
-            try {
-                startActivity(intent);
-            } catch (ActivityNotFoundException exception) {
-                openApplicationSettingPage();
-                Log.d(Constants.TAG,"Failed to open battery optimization setting for "+exception.getMessage());
+                } else {
+                    intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                }
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException exception) {
+                    openApplicationSettingPage();
+                    Log.d(Constants.TAG,"Failed to open battery optimization setting for "+exception.getMessage());
+                }
             }
         }
     }
@@ -393,16 +398,16 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
                 saveBlockListNumberToStorage();
                 break;
 
-            case R.id.generalUserHomeActivityBatteryOptimizationSettingButtonId:
-                openBatteryOptimizationSetting();
-                break;
-
             case R.id.generalUserHomeActivityBackgroundDataRestrictionSettingButtonId:
                 openBackgroundDataRestrictionSetting();
                 break;
 
             case R.id.generalUserHomeActivityAppNotificationSettingButtonId:
                 openNotificationSetting();
+                break;
+
+            case R.id.generalUserHomeActivityDisableBatteryOptimizationSettingButtonId:
+                openBatteryOptimizationSetting();
                 break;
         }
     }
@@ -418,6 +423,7 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
         checkMandatoryUpdate();
 //        getBackgroundServiceRestrictionStatus();
 
+
         String userEmail = Utils.getStringFromStorage(this, Utils.userEmailKey, null);
         if (userEmail != null) {
             String[] fragile = userEmail.split("@");
@@ -431,6 +437,7 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
         if (Utils.getStringFromStorage(GeneralUserHomeActivity.this, Utils.recordBlockListNumberKey, null) == null) {
             showBlockListPhoneAlertDialog();
         }
+
     }
 
 
