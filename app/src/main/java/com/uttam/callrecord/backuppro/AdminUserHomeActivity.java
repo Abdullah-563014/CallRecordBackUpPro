@@ -837,7 +837,7 @@ public class AdminUserHomeActivity extends AppCompatActivity implements View.OnC
                 if (userPaidStatus!=null && userPaidStatus.equalsIgnoreCase("true")){
                     Toast.makeText(this, "You already a premium user.", Toast.LENGTH_SHORT).show();
                 }else {
-                    payUsingEasyPay("300.00","Q98610597@ybl",userName,userName+" purchased the premium features");
+                    payUsingEasyPay("350.00","Q98610597@ybl",userName,userName+" purchased the premium features");
                 }
                 break;
         }
