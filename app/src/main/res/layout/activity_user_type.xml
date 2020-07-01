@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="40dp"
-    android:gravity="center"
     tools:context=".UserTypeActivity">
     <Button
         android:id="@+id/userTypeActivityFirstLuckTryButtonId"

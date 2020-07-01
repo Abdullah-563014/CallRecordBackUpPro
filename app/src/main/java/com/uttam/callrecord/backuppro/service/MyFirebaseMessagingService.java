@@ -21,6 +21,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.uttam.callrecord.backuppro.Constants;
 import com.uttam.callrecord.backuppro.MainActivity;
 import com.uttam.callrecord.backuppro.R;
+import com.uttam.callrecord.backuppro.UserTypeActivity;
 import com.uttam.callrecord.backuppro.Utils;
 
 import static com.uttam.callrecord.backuppro.CallRecorderApp.MY_NOTIFICATION_CHANNEL_ID;
@@ -56,7 +57,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void showNotification(String notificationTitle, String notificationBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, UserTypeActivity.class);
         intent.setAction(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -92,4 +93,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(notificationId,notification);
     }
+
+
 }
