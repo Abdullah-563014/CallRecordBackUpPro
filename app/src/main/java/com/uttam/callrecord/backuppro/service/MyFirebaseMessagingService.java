@@ -72,7 +72,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setContentText(notificationBody)
                     .setSmallIcon(R.drawable.launcher_image_notification)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setContentIntent(pendingIntent)
+//                    .setContentIntent(pendingIntent)
                     .setOngoing(true)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .build();
@@ -84,7 +84,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setContentText(notificationBody)
                     .setSmallIcon(R.drawable.launcher_image_notification)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setContentIntent(pendingIntent)
+//                    .setContentIntent(pendingIntent)
                     .setOngoing(true)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .build();
