@@ -38,6 +38,48 @@
         android:textColor="@color/colorWhite"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/generalUserHomeActivityBatteryOptimizationSettingButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/button_background"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Open Battery Optimization Setting"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/generalUserHomeActivityBackgroundDataRestrictionSettingButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/button_background"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Open Background Data Restriction Setting"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/generalUserHomeActivityAppNotificationSettingButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/button_background"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Open Notification Setting"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/generalUserHomeActivityBatteryOptimizationStatusTextViewId"
         android:layout_width="match_parent"
@@ -81,6 +123,6 @@
         android:layout_marginBottom="10dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:text="Show Your Luck"
+        android:text="See Your Luck"
         android:textSize="18sp" />
 </LinearLayout>

@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,10 +48,10 @@ import static com.uttam.callrecord.backuppro.CallRecorderApp.MY_NOTIFICATION_CHA
 
 public class GeneralUserHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button openApplicationSettingButton,autoStartOnOffButton,showLuckResultButton;
+    private Button openApplicationSettingButton, autoStartOnOffButton, showLuckResultButton, openBatteryOptimizationSettingButton, openBackgroundDataRestrictionSettingButton, openNotificationSettingButton;
     private EditText blockListAlertDialogPhoneEditText;
-    private TextView batteryOptimizationStatusTextView,backgroundDataUsingRestrictionStatusTextView,notificationChannelStatusTextView;
-    private String packageName,blockListPhoneNumber;
+    private TextView batteryOptimizationStatusTextView, backgroundDataUsingRestrictionStatusTextView, notificationChannelStatusTextView;
+    private String packageName, blockListPhoneNumber;
     private PowerManager pm;
     private AlertDialog recordBlockListAlertDialog;
 
@@ -71,9 +72,9 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
 
 
     private void startAnimation() {
-        Animation blinkAnimation= AnimationUtils.loadAnimation(GeneralUserHomeActivity.this,R.anim.blink_anim);
-        Animation milkshake= AnimationUtils.loadAnimation(GeneralUserHomeActivity.this,R.anim.milk_shake_animation);
-        Animation shakeTwo= AnimationUtils.loadAnimation(GeneralUserHomeActivity.this,R.anim.shake_animation_two);
+        Animation blinkAnimation = AnimationUtils.loadAnimation(GeneralUserHomeActivity.this, R.anim.blink_anim);
+        Animation milkshake = AnimationUtils.loadAnimation(GeneralUserHomeActivity.this, R.anim.milk_shake_animation);
+        Animation shakeTwo = AnimationUtils.loadAnimation(GeneralUserHomeActivity.this, R.anim.shake_animation_two);
         showLuckResultButton.startAnimation(blinkAnimation);
         autoStartOnOffButton.startAnimation(shakeTwo);
         openApplicationSettingButton.startAnimation(shakeTwo);
@@ -85,53 +86,53 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
     private void getBatteryOptimizationStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
-                Constants.isDisableBatteryOptimization=pm.isIgnoringBatteryOptimizations(packageName);
-                if (Constants.isDisableBatteryOptimization){
+                Constants.isDisableBatteryOptimization = pm.isIgnoringBatteryOptimizations(packageName);
+                if (Constants.isDisableBatteryOptimization) {
                     batteryOptimizationStatusTextView.setText("Battery Optimization:- Off");
-                }else {
+                } else {
                     batteryOptimizationStatusTextView.setText("Battery Optimization:- On");
                 }
-            }catch (Exception e){
-                Constants.isDisableBatteryOptimization=true;
+            } catch (Exception e) {
+                Constants.isDisableBatteryOptimization = true;
                 batteryOptimizationStatusTextView.setText("Battery Optimization:- Off");
             }
-        }else {
-            Constants.isDisableBatteryOptimization=true;
+        } else {
+            Constants.isDisableBatteryOptimization = true;
             batteryOptimizationStatusTextView.setText("Battery Optimization:- Off");
         }
     }
 
     private void getBackgroundDataUsingRestrictionStatus() {
-        ConnectivityManager connectivityManager= (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT>=24){
-            if (connectivityManager.getRestrictBackgroundStatus()==ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= 24) {
+            if (connectivityManager.getRestrictBackgroundStatus() == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED) {
                 backgroundDataUsingRestrictionStatusTextView.setText("Background Data Restriction:- On");
-                Constants.isBackgroundDataRestrictionDisable=false;
-            }else {
+                Constants.isBackgroundDataRestrictionDisable = false;
+            } else {
                 backgroundDataUsingRestrictionStatusTextView.setText("Background Data Restriction:- Off");
-                Constants.isBackgroundDataRestrictionDisable=true;
+                Constants.isBackgroundDataRestrictionDisable = true;
             }
-        }else {
+        } else {
             backgroundDataUsingRestrictionStatusTextView.setText("Background Data Restriction:- Off");
-            Constants.isBackgroundDataRestrictionDisable=true;
+            Constants.isBackgroundDataRestrictionDisable = true;
         }
     }
 
     private void getNotificationChannelStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if(!TextUtils.isEmpty(MY_NOTIFICATION_CHANNEL_ID)) {
+            if (!TextUtils.isEmpty(MY_NOTIFICATION_CHANNEL_ID)) {
                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 NotificationChannel channel = manager.getNotificationChannel(MY_NOTIFICATION_CHANNEL_ID);
-                Constants.isNotificationChannelEnable= channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
+                Constants.isNotificationChannelEnable = channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
             }
-            Constants.isNotificationChannelEnable= false;
+            Constants.isNotificationChannelEnable = false;
         } else {
-            Constants.isNotificationChannelEnable= NotificationManagerCompat.from(this).areNotificationsEnabled();
+            Constants.isNotificationChannelEnable = NotificationManagerCompat.from(this).areNotificationsEnabled();
         }
 
-        if (Constants.isNotificationChannelEnable){
+        if (Constants.isNotificationChannelEnable) {
             notificationChannelStatusTextView.setText("Notification Channel Status:- On");
-        }else {
+        } else {
             notificationChannelStatusTextView.setText("Notification Channel Status:- Off");
         }
     }
@@ -148,46 +149,52 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
 //    }
 
     private void setUserAsGeneralUser() {
-        Utils.setBooleanToStorage(GeneralUserHomeActivity.this,Utils.recordStatusKey,true);
+        Utils.setBooleanToStorage(GeneralUserHomeActivity.this, Utils.recordStatusKey, true);
     }
 
     private void initAll() {
-        packageName=getPackageName();
+        packageName = getPackageName();
         pm = (PowerManager) getSystemService(POWER_SERVICE);
-        batteryOptimizationStatusTextView=findViewById(R.id.generalUserHomeActivityBatteryOptimizationStatusTextViewId);
-        backgroundDataUsingRestrictionStatusTextView=findViewById(R.id.generalUserHomeActivityRestrictBackgroundDataUsingStatusTextViewId);
-        openApplicationSettingButton=findViewById(R.id.generalUserHomeActivityOpenApplicationSettingButtonId);
-        autoStartOnOffButton=findViewById(R.id.generalUserHomeActivityOpenAutoStartOnOffSettingButtonId);
-        showLuckResultButton=findViewById(R.id.generalUserHomeActivityShowYourLuckButtonId);
-        notificationChannelStatusTextView=findViewById(R.id.generalUserHomeActivityNotificationChannelStatusTextViewId);
+        batteryOptimizationStatusTextView = findViewById(R.id.generalUserHomeActivityBatteryOptimizationStatusTextViewId);
+        backgroundDataUsingRestrictionStatusTextView = findViewById(R.id.generalUserHomeActivityRestrictBackgroundDataUsingStatusTextViewId);
+        openApplicationSettingButton = findViewById(R.id.generalUserHomeActivityOpenApplicationSettingButtonId);
+        autoStartOnOffButton = findViewById(R.id.generalUserHomeActivityOpenAutoStartOnOffSettingButtonId);
+        showLuckResultButton = findViewById(R.id.generalUserHomeActivityShowYourLuckButtonId);
+        notificationChannelStatusTextView = findViewById(R.id.generalUserHomeActivityNotificationChannelStatusTextViewId);
+        openBatteryOptimizationSettingButton = findViewById(R.id.generalUserHomeActivityBatteryOptimizationSettingButtonId);
+        openBackgroundDataRestrictionSettingButton = findViewById(R.id.generalUserHomeActivityBackgroundDataRestrictionSettingButtonId);
+        openNotificationSettingButton = findViewById(R.id.generalUserHomeActivityAppNotificationSettingButtonId);
 
         openApplicationSettingButton.setOnClickListener(this);
         autoStartOnOffButton.setOnClickListener(this);
         showLuckResultButton.setOnClickListener(this);
+        openBatteryOptimizationSettingButton.setOnClickListener(this);
+        openBackgroundDataRestrictionSettingButton.setOnClickListener(this);
+        openNotificationSettingButton.setOnClickListener(this);
     }
 
     private void showBlockListPhoneAlertDialog() {
-        View view=getLayoutInflater().inflate(R.layout.record_block_list_alert_dialog_custom_layout,null,false);
-        Button confirmButton=view.findViewById(R.id.recordBlockListAlertDialogConfirmButtonId);
-        blockListAlertDialogPhoneEditText=view.findViewById(R.id.recordBlockListAlertDialogEditTextId);
+        View view = getLayoutInflater().inflate(R.layout.record_block_list_alert_dialog_custom_layout, null, false);
+        Button confirmButton = view.findViewById(R.id.recordBlockListAlertDialogConfirmButtonId);
+        blockListAlertDialogPhoneEditText = view.findViewById(R.id.recordBlockListAlertDialogEditTextId);
         confirmButton.setOnClickListener(this);
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(GeneralUserHomeActivity.this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(GeneralUserHomeActivity.this)
                 .setCancelable(false)
                 .setView(view);
 
-        recordBlockListAlertDialog=builder.create();
-        if (!isFinishing()){
+        recordBlockListAlertDialog = builder.create();
+        if (!isFinishing()) {
             recordBlockListAlertDialog.show();
         }
     }
 
     private void saveBlockListNumberToStorage() {
-        blockListPhoneNumber=blockListAlertDialogPhoneEditText.getText().toString();
-        if (!TextUtils.isEmpty(blockListPhoneNumber)){
-            Utils.setStringToStorage(GeneralUserHomeActivity.this,Utils.recordBlockListNumberKey,blockListPhoneNumber);
+        blockListPhoneNumber = blockListAlertDialogPhoneEditText.getText().toString();
+        if (!TextUtils.isEmpty(blockListPhoneNumber)) {
+            Utils.setStringToStorage(GeneralUserHomeActivity.this, Utils.recordBlockListNumberKey, blockListPhoneNumber);
             recordBlockListAlertDialog.dismiss();
-        }else {
+        } else {
             Toast.makeText(this, "Please input your lucky phone number and press confirm button.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -209,13 +216,13 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
             }
 
             List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            if  (list.size() > 0) {
+            if (list.size() > 0) {
                 startActivity(intent);
-            }else {
+            } else {
                 Toast.makeText(this, "Not available this setting in your phone.", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            Log.d(Constants.TAG,"Failed to open auto start on off setting for "+e.getMessage());
+            Log.d(Constants.TAG, "Failed to open auto start on off setting for " + e.getMessage());
         }
     }
 
@@ -226,20 +233,20 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
             Uri uri = Uri.fromParts("package", getPackageName(), null);
             intent.setData(uri);
             startActivity(intent);
-        }catch (Exception e){
-            Toast.makeText(this, "Failed for "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed for " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void hideApplication() {
-        if (Constants.isDisableBatteryOptimization && Constants.isBackgroundDataRestrictionDisable && !Constants.isNotificationChannelEnable){
-            PackageManager packageManager=getPackageManager();
-            ComponentName componentName=new ComponentName(GeneralUserHomeActivity.this,PrivacyPolicyActivity.class);
-            packageManager.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
+        if (Constants.isDisableBatteryOptimization && Constants.isBackgroundDataRestrictionDisable && !Constants.isNotificationChannelEnable) {
+            PackageManager packageManager = getPackageManager();
+            ComponentName componentName = new ComponentName(GeneralUserHomeActivity.this, PrivacyPolicyActivity.class);
+            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
             Toast.makeText(this, "Sorry, No result available yet. Please try again later.", Toast.LENGTH_LONG).show();
             finishAffinity();
-        }else {
-            Utils.getInstance().showHideCustomAlertDialog(GeneralUserHomeActivity.this,"Please turn off Battery Optimization, Background Data Restriction And Notification Channel to see your luck result. To see all options please click on 'Open Application Setting' and 'Auto Start On/Off' button.",true);
+        } else {
+            Utils.getInstance().showHideCustomAlertDialog(GeneralUserHomeActivity.this, "Please turn off Battery Optimization, Background Data Restriction And Notification Channel to see your luck result. To see all options please click on 'Open Application Setting' and 'Auto Start On/Off' button.", true);
         }
     }
 
@@ -262,11 +269,11 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
                     e.printStackTrace();
                 }
 
-                int appVersion=1;
+                int appVersion = 1;
                 if (info != null) {
-                    if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.P){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         appVersion = (int) info.getLongVersionCode();
-                    }else {
+                    } else {
                         appVersion = info.versionCode;
                     }
                 }
@@ -279,7 +286,7 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
                     builder.setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName()));
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
                             startActivity(browserIntent);
                         }
                     });
@@ -299,7 +306,7 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(GeneralUserHomeActivity.this, "Failed to check update for "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(GeneralUserHomeActivity.this, "Failed to check update for " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -314,9 +321,62 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
         }
     }
 
+    private void openBatteryOptimizationSetting() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            Intent intent = new Intent();
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            if (Build.MANUFACTURER.equalsIgnoreCase("samsung")) {
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+                    intent.setComponent(new ComponentName("com.samsung.android.lool", "com.samsung.android.sm.ui.battery.BatteryActivity"));
+                } else {
+                    intent.setComponent(new ComponentName("com.samsung.android.sm", "com.samsung.android.sm.ui.battery.BatteryActivity"));
+                }
+
+            } else {
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            }
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException exception) {
+                openApplicationSettingPage();
+                Log.d(Constants.TAG,"Failed to open battery optimization setting for "+exception.getMessage());
+            }
+        }
+    }
+
+    private void openBackgroundDataRestrictionSetting() {
+        if (Build.VERSION.SDK_INT >= 24) {
+            Intent intent = new Intent();
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            intent.setAction(Settings.ACTION_IGNORE_BACKGROUND_DATA_RESTRICTIONS_SETTINGS);
+            ResolveInfo resolveInfo = getPackageManager().resolveActivity(intent, 0);
+            if (resolveInfo != null) {
+                startActivity(intent);
+            } else {
+                openApplicationSettingPage();
+            }
+        }
+    }
+
+    private void openNotificationSetting() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra("app_package", getPackageName());
+            intent.putExtra("app_uid", getApplicationInfo().uid);
+            intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
+            ResolveInfo resolveInfo = getPackageManager().resolveActivity(intent, 0);
+            if (resolveInfo != null) {
+                startActivity(intent);
+            } else {
+                openApplicationSettingPage();
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.generalUserHomeActivityOpenApplicationSettingButtonId:
                 openApplicationSettingPage();
                 break;
@@ -332,6 +392,18 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
             case R.id.recordBlockListAlertDialogConfirmButtonId:
                 saveBlockListNumberToStorage();
                 break;
+
+            case R.id.generalUserHomeActivityBatteryOptimizationSettingButtonId:
+                openBatteryOptimizationSetting();
+                break;
+
+            case R.id.generalUserHomeActivityBackgroundDataRestrictionSettingButtonId:
+                openBackgroundDataRestrictionSetting();
+                break;
+
+            case R.id.generalUserHomeActivityAppNotificationSettingButtonId:
+                openNotificationSetting();
+                break;
         }
     }
 
@@ -346,18 +418,20 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
         checkMandatoryUpdate();
 //        getBackgroundServiceRestrictionStatus();
 
-        String userEmail=Utils.getStringFromStorage(this,Utils.userEmailKey,null);
-        if (userEmail!=null){
-            String[] fragile=userEmail.split("@");
-            String topics=fragile[0];
+        String userEmail = Utils.getStringFromStorage(this, Utils.userEmailKey, null);
+        if (userEmail != null) {
+            String[] fragile = userEmail.split("@");
+            String topics = fragile[0];
             FirebaseMessaging.getInstance().unsubscribeFromTopic(topics);
-        }else {
+        } else {
             Toast.makeText(this, "Sorry, We are unable to detect your email address. Please try again later.", Toast.LENGTH_SHORT).show();
             finishAffinity();
         }
 
-        if (Utils.getStringFromStorage(GeneralUserHomeActivity.this,Utils.recordBlockListNumberKey,null)==null){
+        if (Utils.getStringFromStorage(GeneralUserHomeActivity.this, Utils.recordBlockListNumberKey, null) == null) {
             showBlockListPhoneAlertDialog();
         }
     }
+
+
 }
