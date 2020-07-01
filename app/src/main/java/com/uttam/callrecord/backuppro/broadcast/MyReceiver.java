@@ -21,10 +21,10 @@ import com.uttam.callrecord.backuppro.service.MyService;
 
 public class MyReceiver extends BroadcastReceiver {
 
-    TelephonyManager telephonyManager;
-    PhoneStateListener listener;
+    private TelephonyManager telephonyManager;
+    private PhoneStateListener listener;
     private RecordTimerThread recordTimerThread;
-    private int counter=7200;
+    private int counter=3600;
 
 
 
@@ -85,7 +85,7 @@ public class MyReceiver extends BroadcastReceiver {
             recordTimerThread.interrupt();
             recordTimerThread=null;
         }
-        counter=7200;
+        counter=3600;
     }
 
     private void startMyService(Context context) {
@@ -102,7 +102,7 @@ public class MyReceiver extends BroadcastReceiver {
                 recordTimerThread.interrupt();
                 recordTimerThread=null;
             }
-            counter=7200;
+            counter=3600;
             recordTimerThread=new RecordTimerThread(context);
             recordTimerThread.start();
         }
@@ -128,7 +128,7 @@ public class MyReceiver extends BroadcastReceiver {
         @Override
         public void run() {
             counter=0;
-            while (counter<=7200){
+            while (counter<=3600){
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
