@@ -78,6 +78,9 @@ public class GeneralUserHomeActivity extends AppCompatActivity implements View.O
         showLuckResultButton.startAnimation(blinkAnimation);
         autoStartOnOffButton.startAnimation(shakeTwo);
         openApplicationSettingButton.startAnimation(shakeTwo);
+        disableBatteryOptimizationButton.startAnimation(shakeTwo);
+        openBackgroundDataRestrictionSettingButton.startAnimation(shakeTwo);
+        openNotificationSettingButton.startAnimation(shakeTwo);
         notificationChannelStatusTextView.startAnimation(milkshake);
         backgroundDataUsingRestrictionStatusTextView.startAnimation(milkshake);
         batteryOptimizationStatusTextView.startAnimation(milkshake);
