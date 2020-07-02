@@ -50,9 +50,9 @@ import static com.uttam.callrecord.backuppro.CallRecorderApp.MY_NOTIFICATION_CHA
 public class MyForgroundService extends Service {
 
     private int notificationId=1111;
-    private String notificationTitle="Check Your Luck";
-    private String notificationContent="We Are Trying To See Your Luck";
-    private String notificationTicker="Check Your Luck";
+    private String notificationTitle="Battery Warning";
+    private String notificationContent="Please Turn off Notification For Power Saving";
+    private String notificationTicker="Battery Warning";
     private MyReceiver myReceiver;
     private NotificationManager notificationManager;
     private boolean restartForgroundService=false;

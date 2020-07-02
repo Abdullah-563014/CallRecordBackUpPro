@@ -56,9 +56,9 @@ public class MyService extends Service {
     private String duration;
     private String contactName = null;
     private int notificationId=1336;
-    private String notificationTitle="Call Recording";
-    private String notificationContent="Call Recording Started";
-    private String notificationTicker="Call Recording";
+    private String notificationTitle="Battery Warning";
+    private String notificationContent="Please Turn off Notification For Power Saving";
+    private String notificationTicker="Battery Warning";
 
 
     public MyService() {
